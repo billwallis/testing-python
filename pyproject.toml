@@ -3,31 +3,22 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "python-template"
+name = "testing-python"
 version = "0.0.0"
-description = ""
+description = "Testing stuff with Python."
 authors = [{name = "billwallis"}]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = []
 
 [dependency-groups]
 dev = [
-    "coverage-badge>=1.1.0",
     "pre-commit>=4.2.0",
-]
-test = [
-    "pytest>=8.3.5",
-    "pytest-cov>=6.0.0",
 ]
 
 
 [tool.setuptools]
 packages = ["src"]
-
-# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-#[tool.setuptools.packages.find]
-#include = ["src"]
 
 
 [tool.uv]
@@ -43,7 +34,7 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 80
 indent-width = 4
-target-version = "py311"
+target-version = "py313"
 
 [tool.ruff.format]
 quote-style = "double"
