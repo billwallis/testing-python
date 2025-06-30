@@ -9,10 +9,13 @@ description = "Testing stuff with Python."
 authors = [{name = "billwallis"}]
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "setuptools>=80.9.0",
+]
 
 [dependency-groups]
 dev = [
+    "poethepoet>=0.36.0", # https://poethepoet.natn.io/index.html
     "pre-commit>=4.2.0",
 ]
 
@@ -24,6 +27,16 @@ packages = ["src"]
 [tool.uv]
 required-version = ">=0.7,<1.0"
 default-groups = "all"
+
+
+[tool.poe]
+envfile = ".env"
+
+[tool.poe.tasks]
+sync.shell = """
+    uv lock
+    uv sync --all-groups --no-cache
+"""
 
 
 [tool.pytest.ini_options]
