@@ -1,0 +1,4 @@
+!!python/object:main.Model
+name: first_model
+archived: false
+columns: ["column_1", "column_2", "column_3"]

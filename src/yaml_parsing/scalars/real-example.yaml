@@ -1,0 +1,125 @@
+---
+pipe: |
+  Expand the key-value pairs into the import CTEs.
+
+
+  The CTE names will be the key, and the values will be the relation used in
+  the `FROM` clause. There is a special named parameter `import_options`
+  which can be used to pass options to the macro.
+
+
+  Example usage:
+
+      -- Simple usage
+      {% raw %}{{ tasman_dbt_utils.import(
+          orders=source("orders"),
+          customers=ref("customers")
+      ) }}{% endraw %}
+
+      -- Using the import options
+      {% raw %}{{ tasman_dbt_utils.import(
+          orders=source("orders"),
+          import_options={
+              "expand_columns": true,
+              "recursive": true
+          }
+      ) }}{% endraw %}
+  ```
+greater-than: >
+  Expand the key-value pairs into the import CTEs.
+
+
+  The CTE names will be the key, and the values will be the relation used in
+  the `FROM` clause. There is a special named parameter `import_options`
+  which can be used to pass options to the macro.
+
+
+  Example usage:
+
+      -- Simple usage
+      {% raw %}{{ tasman_dbt_utils.import(
+          orders=source("orders"),
+          customers=ref("customers")
+      ) }}{% endraw %}
+
+      -- Using the import options
+      {% raw %}{{ tasman_dbt_utils.import(
+          orders=source("orders"),
+          import_options={
+              "expand_columns": true,
+              "recursive": true
+          }
+      ) }}{% endraw %}
+  ```
+---
+pipe: |
+  This model contains each subscription by day. Both trial and paid subscriptions are included.
+  Based on the subscription_change_label a quick history of the subscription is given. Only paid
+  subscriptions are included in this column. We look across subscriptions regardless of the subscription_id.
+  It compares the subscription with the previous month. If the subscription_id remains the same
+  it uses that to see if the subscription has changed. If the subscription_id changes we connect it
+  to the new subscription_id.
+
+      I.e.:
+      - Subscription A is active on January 1st
+      - Subscription A is stopped on January 2nd
+      - Subscription B is active on January 2nd
+      - Subscription B is connected to Subscription A
+greater-than: >
+  This model contains each subscription by day. Both trial and paid subscriptions are included.
+  Based on the subscription_change_label a quick history of the subscription is given. Only paid
+  subscriptions are included in this column. We look across subscriptions regardless of the subscription_id.
+  It compares the subscription with the previous month. If the subscription_id remains the same
+  it uses that to see if the subscription has changed. If the subscription_id changes we connect it
+  to the new subscription_id.
+
+      I.e.:
+      - Subscription A is active on January 1st
+      - Subscription A is stopped on January 2nd
+      - Subscription B is active on January 2nd
+      - Subscription B is connected to Subscription A
+---
+pipe: |
+  This model contains each subscription by day. Both trial and paid
+  subscriptions are included.
+
+
+  Based on the subscription_change_label a quick history of the
+  subscription is given. Only paid subscriptions are included in this
+  column.
+
+
+  We look across subscriptions regardless of the subscription_id. It
+  compares the subscription with the previous month. If the
+  subscription_id remains the same it uses that to see if the
+  subscription has changed. If the subscription_id changes we connect it
+  to the new subscription_id.
+
+
+  i.e.:
+    - Subscription A is active on January 1st
+    - Subscription A is stopped on January 2nd
+    - Subscription B is active on January 2nd
+    - Subscription B is connected to Subscription A
+greater-than: >
+  This model contains each subscription by day. Both trial and paid
+  subscriptions are included.
+
+
+  Based on the subscription_change_label a quick history of the
+  subscription is given. Only paid subscriptions are included in this
+  column.
+
+
+  We look across subscriptions regardless of the subscription_id. It
+  compares the subscription with the previous month. If the
+  subscription_id remains the same it uses that to see if the
+  subscription has changed. If the subscription_id changes we connect it
+  to the new subscription_id.
+
+
+  i.e.:
+    - Subscription A is active on January 1st
+    - Subscription A is stopped on January 2nd
+    - Subscription B is active on January 2nd
+    - Subscription B is connected to Subscription A

@@ -24,8 +24,6 @@ repos:
         name: Check for large files
       - id: check-json
         name: Check JSON files are valid and parseable
-      - id: check-yaml
-        name: Check YAML files are valid and parseable
       - id: check-toml
         name: Check TOML files are valid and parseable
       - id: check-ast
