@@ -1,0 +1,25 @@
+---
+pipe: |
+  This is the first line
+  This is the second line
+  This is the third line
+greater-than: >
+  This is the first line
+  This is the second line
+  This is the third line
+pipe-minus: |-
+  This is the first line
+  This is the second line
+  This is the third line
+greater-than-minus: >-
+  This is the first line
+  This is the second line
+  This is the third line
+pipe-plus: |+
+  This is the first line
+  This is the second line
+  This is the third line
+greater-than-plus: >+
+  This is the first line
+  This is the second line
+  This is the third line

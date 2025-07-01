@@ -1,0 +1,30 @@
+---
+canonical:
+  1: y
+  2: Y
+  3: yes
+  4: Yes
+  5: YES
+  6: n
+  7: N
+  8: no
+  9: No
+  10: NO
+logical:
+  1: t
+  2: T
+  3: true
+  4: True
+  5: TRUE
+  6: f
+  7: F
+  8: false
+  9: False
+  10: FALSE
+option:
+  1: on
+  2: On
+  3: ON
+  4: off
+  5: Off
+  6: OFF
