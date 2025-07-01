@@ -1,0 +1,5 @@
+-- client 1
+reset
+publish events "client 1: first message"
+publish events "client 1: second message"
+publish events "client 1: third message"

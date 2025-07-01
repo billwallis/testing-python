@@ -1,0 +1,40 @@
+-- choose the default database
+select 0
+
+
+-- set a key
+set name "examples"
+get name
+
+
+-- set some hashmaps
+del user_1
+hmset user_1 name "billiam" role "data-person"
+hget user_1 name
+hget user_1 role
+hgetall user_1
+hkeys user_1
+hvals user_1
+
+del user_2
+hmset user_2 name "bandit" age 6
+hget user_2 name
+hget user_2 age
+hgetall user_2
+
+
+-- set a list
+lpush things "thing_1"
+lpush things "thing_2"
+lpush things "thing_3"
+lrange things 0 99
+
+
+-- key expiration
+set key_to_expire "this key will expire in 3 seconds"
+expire key_to_expire 3
+get key_to_expire
+
+
+-- subscribe to a channel (no point in doing this in a script)
+subscribe events
