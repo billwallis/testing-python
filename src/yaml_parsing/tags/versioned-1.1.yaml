@@ -1,0 +1,9 @@
+%YAML 1.1
+---
+truthy:
+  1: yes
+  2: no
+  3: true
+  4: false
+  5: on
+  6: off
