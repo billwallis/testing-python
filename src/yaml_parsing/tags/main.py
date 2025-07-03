@@ -1,6 +1,6 @@
 """
 PyYAML adheres to the YAML 1.1 specification.
-ruyaml adheres to the YAML 1.2 specification by default (and supports 1.1).
+ruamel.yaml adheres to the YAML 1.2 specification by default (and supports 1.1).
 
 There's a big difference between the two specs for boolean values:
 
@@ -12,7 +12,7 @@ import dataclasses
 import pathlib
 from collections.abc import Callable
 
-import ruyaml
+import ruamel.yaml as ruyaml
 import yaml  # pyyaml
 
 GREEN = "\033[1;32m"
@@ -44,11 +44,11 @@ def print_values(content: str, loader: Callable) -> None:
 
 def bools_example(content: str):
     """
-    Compare boolean value serialisation between ruyaml and PyYAML.
+    Compare boolean value serialisation between ruamel.yaml and PyYAML.
     """
 
-    print("\nUsing ruyaml:")
-    print_values(content, ruyaml.safe_load_all)
+    print("\nUsing ruamel.yaml:")
+    print_values(content, ruyaml.YAML(typ="safe", pure=True).load_all)
 
     print("\nUsing PyYAML:")
     print_values(content, yaml.safe_load_all)
@@ -66,8 +66,8 @@ def python_example__simple(content: str):
     Serialise YAML content to a Python object.
     """
 
-    print("\nUsing ruyaml:")
-    print("   ", ruyaml.load(content, Loader=ruyaml.Loader))
+    print("\nUsing ruamel.yaml:")
+    print("   ", ruyaml.YAML(typ="unsafe").load(content))
 
     print("\nUsing PyYaml:")
     print("   ", yaml.load(content, Loader=yaml.Loader))  # noqa: S506
@@ -83,8 +83,8 @@ def python_example__complex():
 
 def main():
     bools_example((HERE / "bools.yaml").read_text())
-    # bools_example((HERE / "bools-tagged.yaml").read_text())
-    # python_example__simple((HERE / "python-tag.yaml").read_text())
+    bools_example((HERE / "bools-tagged.yaml").read_text())
+    python_example__simple((HERE / "python-tag.yaml").read_text())
 
 
 if __name__ == "__main__":
