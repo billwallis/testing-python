@@ -54,6 +54,18 @@ def bools_example(content: str):
     print_values(content, yaml.safe_load_all)
 
 
+def versioned_example(content: str):
+    """
+    Compare versioned YAML tags between ruamel.yaml and PyYAML.
+    """
+
+    print("\nUsing ruamel.yaml:")
+    print_values(content, ruyaml.YAML(typ="safe", pure=True).load_all)
+
+    print("\nUsing PyYAML:")
+    print_values(content, yaml.safe_load_all)
+
+
 @dataclasses.dataclass
 class Model:
     name: str
@@ -83,8 +95,10 @@ def python_example__complex():
 
 def main():
     bools_example((HERE / "bools.yaml").read_text())
-    bools_example((HERE / "bools-tagged.yaml").read_text())
-    python_example__simple((HERE / "python-tag.yaml").read_text())
+    # bools_example((HERE / "bools-tagged.yaml").read_text())
+    # versioned_example((HERE / "versioned-1.1.yaml").read_text())
+    # versioned_example((HERE / "versioned-1.2.yaml").read_text())
+    # python_example__simple((HERE / "python-tag.yaml").read_text())
 
 
 if __name__ == "__main__":
