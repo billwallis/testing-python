@@ -19,6 +19,7 @@ from collections.abc import Callable
 import ruamel.yaml as ruyaml
 import yaml  # pyyaml
 
+RED = "\033[1;31m"
 GREEN = "\033[1;32m"
 BLUE = "\033[1;34m"
 PURPLE = "\033[1;35m"
@@ -81,10 +82,18 @@ def set_and_omap_example(content: str):
     """
 
     print(USING_RUAMEL)
-    print(" " * 3, next(ruyaml.YAML(typ="safe", pure=True).load_all(content)))
+    try:
+        print(
+            " " * 3, next(ruyaml.YAML(typ="safe", pure=True).load_all(content))
+        )
+    except Exception as e:
+        print(colour(str(e), RED))
 
     print(USING_PYYAML)
-    print(" " * 3, next(yaml.safe_load_all(content)))
+    try:
+        print(" " * 3, next(yaml.safe_load_all(content)))
+    except Exception as e:
+        print(colour(str(e), RED))
 
 
 @dataclasses.dataclass
