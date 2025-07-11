@@ -1,0 +1,10 @@
+---
+set: !!set
+  ? 1
+  ? 2
+  ? 3
+#  ? 1
+omap: !!omap
+  - foo: bar
+  - yes: no
+  - abc: xyz
