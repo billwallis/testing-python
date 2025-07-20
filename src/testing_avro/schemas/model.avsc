@@ -1,0 +1,11 @@
+{
+  "namespace": "models.avro",
+  "type": "record",
+  "name": "Model",
+  "fields": [
+    {"name": "name", "type": "string"},
+    {"name": "enabled",  "type": ["boolean", "null"], "default": true},
+    {"name": "description", "type": "string"},
+    {"name": "columns", "type": {"type": "array", "items": "string"}, "items": "string", "default": []}
+  ]
+}
