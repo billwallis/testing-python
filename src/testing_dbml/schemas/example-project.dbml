@@ -1,0 +1,79 @@
+project "example-project" {
+  database_type: "DuckDB"
+  note: "An example project demoing DBML."
+}
+
+table users {
+    user_id integer [
+      primary key,
+      increment,
+      note: "The user's ID in the XYZ system."
+    ]
+    username varchar [not null, unique]
+    last_review_datetime datetime [
+      null,
+      note: "The datetime that the user's account was last manually reviewed."
+    ]
+
+    // Why no triple double-quote support? 😭
+    /*
+        Ah, it's because of the "Syntax Consistency" rules:
+
+        > - single quote as 'string': string value
+        > - double quote as "column name": quoting variable
+    */
+    note: '''
+      Users in the XYZ system.
+
+      This object will contain both current and deleted users.
+    '''
+}
+
+enum event_type {
+  login [note: "Successful login"]
+  logout [note: "Successful manual logout"]
+  "login failed" [note: "Unsuccessful manual logout"]
+}
+
+table events {
+    event_id integer [
+      primary key,
+      increment
+    ]
+    user_id integer [
+      not null,
+      ref: > users.user_id
+    ]
+    event_datetime datetime [not null]
+    event_type event_type [not null]
+}
+
+tablegroup auth {
+  google_auth
+  password_auth
+}
+
+tablepartial auth_base {
+    user_id integer [
+      primary key,
+      ref: - users.user_id
+    ]
+    last_accessed datetime [
+      not null,
+      note: "The datetime that this authentication mechanism was most recently used."
+    ]
+}
+
+table google_auth {
+    ~auth_base
+    google_token varchar [
+      not null,
+      note: "The most recently used hashed Google token value."
+    ]
+}
+
+table password_auth {
+    ~auth_base
+    email varchar [not null]
+    password varchar [not null]
+}
