@@ -1,0 +1,6 @@
+// JSON Lines - "CSV" format
+["id", "name",    "is_active"]
+[1,    "Alex",    true]
+[2,    "Blake",   false]
+[3,    "Charlie", true]
+[4,    "Dylan",   false]

@@ -1,0 +1,21 @@
+# YAML stream (more YAML-y)
+---
+id: 1
+name: "Alex"
+is_active: true
+...
+---
+id: 2
+name: "Blake"
+is_active: false
+...
+---
+id: 3
+name: "Charlie"
+is_active: true
+...
+---
+id: 4
+name: "Dylan"
+is_active: false
+...
