@@ -1,6 +1,8 @@
 import contextlib
+import functools
 import json
 import pathlib
+from collections.abc import Callable
 from typing import Any
 
 import dotenv
@@ -13,49 +15,22 @@ from src.github_reports import utils
 dotenv.load_dotenv()
 
 
-def _save_all_branches(
+def _save_all(
     context: utils.Context,
-    repository: Repository,
+    fetch: Callable[[], Any],
+    filename: str,
 ) -> pathlib.Path:
-    """
-    Get all pull requests from a repository.
-    """
-
-    branches_file = context.resource_path / "branches.jsonl"
-    branches_file.write_text("")
-    branches = repository.get_branches()
-    print(f"Found {branches.totalCount} branches")
-
-    with branches_file.open("a", encoding="utf-8") as f:
-        for i, branch in enumerate(branches, start=1):
+    outfile = context.resource_path / filename
+    outfile.write_text("")
+    items = fetch()
+    print(f"Found {items.totalCount} {outfile.stem}")
+    with outfile.open("a", encoding="utf-8") as f:
+        for obj in items:
             f.write(
-                json.dumps(branch.__dict__["_rawData"], cls=utils.ReprEncoder)
+                json.dumps(obj.__dict__["_rawData"], cls=utils.ReprEncoder)
                 + "\n"
             )
-
-    return branches_file
-
-
-def _save_all_prs(
-    context: utils.Context, repository: Repository
-) -> pathlib.Path:
-    """
-    Get all pull requests from a repository.
-    """
-
-    prs_file = context.resource_path / "prs.jsonl"
-    prs_file.write_text("")
-    prs = repository.get_pulls(state="all")
-    print(f"Found {prs.totalCount} pull requests")
-
-    with prs_file.open("a", encoding="utf-8") as f:
-        for i, pr in enumerate(prs, start=1):
-            f.write(
-                json.dumps(pr.__dict__["_rawData"], cls=utils.ReprEncoder)
-                + "\n"
-            )
-
-    return prs_file
+    return outfile
 
 
 def _run_report(
@@ -88,10 +63,9 @@ def _has_admins_as_admin(repository: Repository) -> bool:
     with contextlib.suppress(github.UnknownObjectException):
         teams = list(repository.get_teams())
 
-    for team in teams:
-        if team.name == "Admins" and team.permission == "admin":
-            return True
-    return False
+    return any(
+        team.name == "Admins" and team.permission == "admin" for team in teams
+    )
 
 
 def org(organisation_name: str) -> None:
@@ -142,6 +116,14 @@ def repo(repository_name: str) -> None:
         )
 
         ctx = utils.Context(resource_path=utils.HERE / "data" / repository_name)
-        branches_file = _save_all_branches(ctx, repository)
-        prs_file = _save_all_prs(ctx, repository)
+        branches_file = _save_all(
+            context=ctx,
+            fetch=repository.get_branches,
+            filename="branches.jsonl",
+        )
+        prs_file = _save_all(
+            context=ctx,
+            fetch=functools.partial(repository.get_pulls, state="all"),
+            filename="pull_requests.jsonl",
+        )
         print(_run_report(branches_file, prs_file))
