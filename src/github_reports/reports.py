@@ -59,6 +59,8 @@ def _has_admins_as_admin(repository: Repository) -> bool:
     This is specific to the ``TasmanAnalytics`` organisation.
     """
 
+    assert repository.organization.name == "Tasman"  # noqa: S101
+
     teams = []
     with contextlib.suppress(github.UnknownObjectException):
         teams = list(repository.get_teams())
@@ -66,6 +68,18 @@ def _has_admins_as_admin(repository: Repository) -> bool:
     return any(
         team.name == "Admins" and team.permission == "admin" for team in teams
     )
+
+
+def _has_codeowners(repository: Repository) -> bool:
+    """
+    Check if the repository has a CODEOWNERS file.
+    """
+
+    try:
+        repository.get_contents(".github/CODEOWNERS")
+        return True
+    except github.UnknownObjectException:
+        return False
 
 
 def org(organisation_name: str) -> None:
@@ -91,14 +105,20 @@ def org(organisation_name: str) -> None:
                     utils.colour(f"{repository.name}  (archived)", utils.GREY)
                 )
                 continue
-            del_col = cols[repository.delete_branch_on_merge]
-            has_admins = _has_admins_as_admin(repository)
-            print(
-                f"{utils.colour(repository.name, utils.BOLD)}  "
-                f"(delete branch on merge: {utils.colour(str(repository.delete_branch_on_merge), del_col)}"
-                f", Admins: {utils.colour(str(has_admins), cols[has_admins])})  "
-                f"https://github.com/{organisation_name}/{repository.name}"
-            )
+
+            def col(b: bool) -> str:
+                return utils.colour(str(b), cols[b])
+
+            parts = [
+                f"{utils.colour(repository.name, utils.BOLD)}  (",
+                f"delete branch on merge: {col(repository.delete_branch_on_merge)}",
+                f", CODEOWNERS: {col(_has_codeowners(repository))}",
+                f", Admins: {col(_has_admins_as_admin(repository))}"
+                if organisation_name == "TasmanAnalytics"
+                else "",
+                f")  https://github.com/{organisation_name}/{repository.name}",
+            ]
+            print("".join(parts))
 
 
 def repo(repository_name: str) -> None:
