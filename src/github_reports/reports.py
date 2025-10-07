@@ -109,8 +109,10 @@ def org(organisation_name: str) -> None:
             def col(b: bool) -> str:
                 return utils.colour(str(b), cols[b])
 
+            visibility = "🔒" if repository.visibility == "private" else "🌐"
+
             parts = [
-                f"{utils.colour(repository.name, utils.BOLD)}  (",
+                f"{utils.colour(repository.name, utils.BOLD)} {visibility}  (",
                 f"delete branch on merge: {col(repository.delete_branch_on_merge)}",
                 f", CODEOWNERS: {col(_has_codeowners(repository))}",
                 f", Admins: {col(_has_admins_as_admin(repository))}"

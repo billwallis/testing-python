@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pre-commit-config.json
 ---
 ci:
   autoupdate_schedule: quarterly
@@ -28,6 +29,14 @@ repos:
         name: Check TOML files are valid and parseable
       - id: check-ast
         name: Validate Python
+      - id: detect-private-key
+        name: Check for the existence of private keys
+
+  - repo: https://github.com/pre-commit-ci/pre-commit-ci-config
+    rev: v1.6.1
+    hooks:
+      - id: check-pre-commit-ci-config
+        name: Validate pre-commit CI config
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.8.23
@@ -38,16 +47,14 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.13.3
     hooks:
-      - id: ruff
+      - id: ruff-check
         name: Lint Python code
         args: ["--fix"]
       - id: ruff-format
         name: Format Python code
 
   - repo: https://github.com/billwallis/bills-hooks
-    rev: v0.0.5
+    rev: v0.0.6
     hooks:
-      - id: pre-commit-validate
-        name: Validate pre-commit config
       - id: tidy-gitkeep
         name: Remove redundant .gitkeep files
