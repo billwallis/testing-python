@@ -3,6 +3,10 @@
 .idea/
 .DS_Store
 
+# Data files
+*.*db
+*.*db.wal
+
 # IntelliJ project files
 .run/
 *.iml
@@ -135,3 +139,10 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+### dlt-specific ignores
+secrets.toml
+*.secrets.toml
+.dlt/profile-name
+.dlt/.var
+_local
