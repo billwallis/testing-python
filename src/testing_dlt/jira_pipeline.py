@@ -1,5 +1,5 @@
 import dlt
-from jira import jira, jira_search
+from jira import jira
 
 
 def load(endpoints: list[str] | None = None) -> None:
@@ -23,31 +23,6 @@ def load(endpoints: list[str] | None = None) -> None:
     print(f"Load Information: {load_info}")
 
 
-def load_query_data(queries: list[str]) -> None:
-    """
-    Load issues from specified Jira queries into a dataset.
-
-    Args:
-        queries: A list of JQL queries.
-    """
-    pipeline = dlt.pipeline(
-        pipeline_name="jira_search_pipeline",
-        destination="duckdb",
-        dataset_name="jira_search",
-    )
-
-    load_info = pipeline.run(jira_search().issues(jql_queries=queries))
-
-    print(f"Load Information: {load_info}")
-
-
 if __name__ == "__main__":
     # Add your desired endpoints to the list 'endpoints'
     load(endpoints=None)
-
-    queries = [
-        # "created >= -30d order by created DESC",
-        "project = PD AND updated >= -30d order by updated",
-    ]
-
-    load_query_data(queries=queries)

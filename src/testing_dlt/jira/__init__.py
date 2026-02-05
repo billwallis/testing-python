@@ -44,49 +44,6 @@ def jira(
     return resources
 
 
-@dlt.source(max_table_nesting=2)
-def jira_search(
-    subdomain: str = dlt.secrets.value,
-    email: str = dlt.secrets.value,
-    api_token: str = dlt.secrets.value,
-    page_size: int = DEFAULT_PAGE_SIZE,
-) -> Iterable[DltResource]:
-    """
-    Jira search source function that generates a resource function for searching issues.
-
-    Args:
-        subdomain: The subdomain for the Jira instance.
-        email: The email to authenticate with.
-        api_token: The API token to authenticate with.
-        page_size: Maximum number of results per page
-    Returns:
-        Iterable[DltResource]: Resource function for searching issues.
-    """
-
-    @dlt.resource(write_disposition="replace")
-    def issues(jql_queries: list[str]) -> Iterable[TDataItem]:
-        api_path = "rest/api/3/search/jql"
-
-        for jql in jql_queries:
-            params = {
-                "fields": "*all",
-                "expand": "versionedRepresentations,changelog,operations,transitions,names",
-                "jql": jql,
-            }
-
-            yield from get_paginated_data(
-                api_path=api_path,
-                params=params,
-                subdomain=subdomain,
-                email=email,
-                api_token=api_token,
-                page_size=page_size,
-                data_path="issues",
-            )
-
-    return issues
-
-
 def get_paginated_data(
     subdomain: str,
     email: str,

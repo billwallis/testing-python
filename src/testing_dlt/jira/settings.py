@@ -5,7 +5,7 @@ DEFAULT_ENDPOINTS = {
         "api_path": "rest/api/3/search/jql",
         "params": {
             "fields": "*all",
-            "expand": "versionedRepresentations,changelog,operations,transitions,names",
+            "expand": "renderedFields,names,transitions,changelog",
             "jql": "project=PD",
         },
     },
