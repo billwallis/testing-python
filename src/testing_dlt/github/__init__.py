@@ -2,7 +2,6 @@
 
 import urllib.parse
 from collections.abc import Iterator, Sequence
-from typing import Optional
 
 import dlt
 from dlt.common.typing import TDataItems

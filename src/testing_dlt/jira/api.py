@@ -1,5 +1,4 @@
 # uv run --env-file 'jira/.env' jira/api.py
-
 import json
 import os
 import pathlib
@@ -22,6 +21,7 @@ def get_issue(issue_key: str):
         endpoint,
         headers=headers,
         auth=auth,
+        timeout=30,
     )
 
     return response.json()

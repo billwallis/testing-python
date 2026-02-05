@@ -44,7 +44,7 @@ def jira(
     return resources
 
 
-def get_paginated_data(
+def get_paginated_data(  # noqa: PLR0913
     subdomain: str,
     email: str,
     api_token: str,

@@ -24,12 +24,12 @@ def get_rest_pages(
     access_token: str | None, query: str
 ) -> Iterator[list[StrAny]]:
     def _request(page_url: str) -> requests.Response:
-        r = requests.get(page_url, headers=_get_auth_header(access_token))
+        resp = requests.get(page_url, headers=_get_auth_header(access_token))
         print(
             f"got page {page_url}, requests left: "
-            + r.headers["x-ratelimit-remaining"]
+            + resp.headers["x-ratelimit-remaining"]
         )
-        return r
+        return resp
 
     next_page_url = REST_API_BASE_URL + query
     while True:
@@ -53,15 +53,18 @@ def get_stargazers(
     items_per_page: int,
     max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
-    variables = {"owner": owner, "name": name, "items_per_page": items_per_page}
-    for page_items in _get_graphql_pages(
+    variables = {
+        "owner": owner,
+        "name": name,
+        "items_per_page": items_per_page,
+    }
+    yield from _get_graphql_pages(  # type: ignore
         access_token,
         queries.STARGAZERS_QUERY,
         variables,
         "stargazers",
         max_items,
-    ):
-        yield page_items
+    )
 
 
 def get_deployments(
@@ -71,15 +74,18 @@ def get_deployments(
     page_size: int,
     max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
-    variables = {"owner": owner, "name": name, "page_size": page_size}
-    for page_items in _get_graphql_pages(
+    variables = {
+        "owner": owner,
+        "name": name,
+        "page_size": page_size,
+    }
+    yield from _get_graphql_pages(  # type: ignore
         access_token,
         queries.DEPLOYMENTS_QUERY,
         variables,
         "deployments",
         max_items,
-    ):
-        yield page_items
+    )
 
 
 def get_default_branch_commits(
@@ -89,15 +95,18 @@ def get_default_branch_commits(
     page_size: int,
     max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
-    variables = {"owner": owner, "name": name, "page_size": page_size}
-    for page_items in _get_graphql_pages(
+    variables = {
+        "owner": owner,
+        "name": name,
+        "page_size": page_size,
+    }
+    yield from _get_graphql_pages(  # type: ignore
         access_token,
         queries.DEFAULT_BRANCH_COMMITS,
         variables,
         "history",
         max_items,
-    ):
-        yield page_items
+    )
 
 
 def get_repositories(
@@ -106,18 +115,20 @@ def get_repositories(
     page_size: int,
     max_items: int | None,
 ) -> Iterator[Iterator[StrAny]]:
-    variables = {"owner": owner, "page_size": page_size}
-    for page_items in _get_graphql_pages(
+    variables = {
+        "owner": owner,
+        "page_size": page_size,
+    }
+    yield from _get_graphql_pages(  # type: ignore
         access_token,
         queries.REPOSITORIES,
         variables,
         "repositories",
         max_items,
-    ):
-        yield page_items
+    )
 
 
-def get_reactions_data(
+def get_reactions_data(  # noqa: PLR0913
     node_type: str,
     owner: str,
     name: str,
@@ -132,7 +143,8 @@ def get_reactions_data(
         "first_commits": 100,
         "node_type": node_type,
     }
-    for page_items in _get_graphql_pages(
+
+    yield from _get_graphql_pages(  # type: ignore
         access_token,
         {
             "issues": queries.ISSUES_QUERY,
@@ -141,12 +153,11 @@ def get_reactions_data(
         variables,
         node_type,
         max_items,
-    ):
-        yield page_items
+    )
 
 
 def _extract_top_connection(data: StrAny, node_type: str) -> StrAny:
-    assert isinstance(data, dict) and len(data) == 1, (
+    assert isinstance(data, dict) and len(data) == 1, (  # noqa: S101
         f"The data with list of {node_type} must be a dictionary and contain only one element"
     )
     next_data = next(iter(data.values()))
@@ -160,12 +171,11 @@ def _run_graphql_query(
     access_token: str, query: str, variables: DictStrAny
 ) -> tuple[StrAny, StrAny]:
     def _request() -> requests.Response:
-        r = requests.post(
+        return requests.post(
             GRAPHQL_API_BASE_URL,
             json={"query": query, "variables": variables},
             headers=_get_auth_header(access_token),
         )
-        return r
 
     data = _request().json()
     if "errors" in data:
