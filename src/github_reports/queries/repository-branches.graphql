@@ -1,0 +1,75 @@
+query($organisation: String!, $repository: String!, $page_size: Int!, $page_after: String) {
+    repository(owner: $organisation, name: $repository) {
+        id
+        name
+        nameWithOwner
+        refs(refPrefix: "refs/heads/", first: $page_size, after: $page_after) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+                hasPreviousPage
+                hasNextPage
+            }
+            nodes {
+                # associatedPullRequests(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                branchProtectionRule {
+                    allowsDeletions
+                    allowsForcePushes
+                    blocksCreations
+                    # branchProtectionRuleConflicts(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                    # bypassForcePushAllowances(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                    # bypassPullRequestAllowances(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                    creator {avatarUrl login resourcePath url}
+                    databaseId
+                    dismissesStaleReviews
+                    id
+                    isAdminEnforced
+                    lockAllowsFetchAndMerge
+                    lockBranch
+                    # matchingRefs(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                    pattern
+                    # pushAllowances(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                    # repository {...}
+                    requireLastPushApproval
+                    requiredApprovingReviewCount
+                    requiredDeploymentEnvironments
+                    requiredStatusCheckContexts
+                    requiredStatusChecks {app {name} context}
+                    requiresApprovingReviews
+                    requiresCodeOwnerReviews
+                    requiresCommitSignatures
+                    requiresConversationResolution
+                    requiresDeployments
+                    requiresLinearHistory
+                    requiresStatusChecks
+                    requiresStrictStatusChecks
+                    restrictsPushes
+                    restrictsReviewDismissals
+                    # reviewDismissalAllowances(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                }
+                # compare(headRef: ...) {...}
+                id
+                name
+                prefix
+                # refUpdateRule {...}
+                # repository {...}
+                # rules(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                target {
+                    abbreviatedOid
+                    commitResourcePath
+                    commitUrl
+                    id
+                    oid
+                    # repository {...}
+                }
+            }
+        }
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}

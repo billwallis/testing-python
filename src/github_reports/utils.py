@@ -1,9 +1,5 @@
-import contextlib
 import json
-import os
 import pathlib
-
-import github
 
 RED = "\033[1;31m"
 GREEN = "\033[1;32m"
@@ -43,16 +39,3 @@ class Context:
 class ReprEncoder(json.JSONEncoder):
     def default(self, o):
         return repr(o)
-
-
-@contextlib.contextmanager
-def github_connection():
-    """
-    Return a context manager for a GitHub connection.
-    """
-
-    gh = github.Github(
-        auth=github.Auth.Token(os.environ["GITHUB_TOKEN"]),
-    )
-    yield gh
-    gh.close()

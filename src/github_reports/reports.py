@@ -1,36 +1,36 @@
-import contextlib
-import functools
 import json
+import os
 import pathlib
-from collections.abc import Callable
 from typing import Any
 
 import dotenv
 import duckdb
-import github
-from github.Repository import Repository
 
-from src.github_reports import utils
+from src.github_reports import client, utils
 
 dotenv.load_dotenv()
 
+HERE = pathlib.Path(__file__).parent
+QUERIES = HERE / "queries"
+DATA = HERE / "data"
 
-def _save_all(
-    context: utils.Context,
-    fetch: Callable[[], Any],
-    filename: str,
-) -> pathlib.Path:
-    outfile = context.resource_path / filename
-    outfile.write_text("")
-    items = fetch()
-    print(f"Found {items.totalCount} {outfile.stem}")
-    with outfile.open("a", encoding="utf-8") as f:
-        for obj in items:
-            f.write(
-                json.dumps(obj.__dict__["_rawData"], cls=utils.ReprEncoder)
-                + "\n"
-            )
-    return outfile
+
+def _col_bool(b: bool | None) -> str:
+    cols = {
+        True: utils.GREEN,
+        False: utils.RED,
+        None: utils.BOLD + utils.GREY,
+    }
+    return utils.colour(str(b), cols[b])
+
+
+def _read_query(query_name: str) -> str:
+    return (QUERIES / query_name).read_text(encoding="utf-8")
+
+
+def _make_dir(dir_path: pathlib.Path) -> pathlib.Path:
+    dir_path.mkdir(parents=True, exist_ok=True)
+    return dir_path
 
 
 def _run_report(
@@ -52,36 +52,6 @@ def _run_report(
     return duckdb.sql(report_sql)
 
 
-def _has_admins_as_admin(repository: Repository) -> bool:
-    """
-    Check if the repository has the Admins team as an admin.
-
-    This is specific to the ``TasmanAnalytics`` organisation.
-    """
-
-    assert repository.organization.name == "Tasman"  # noqa: S101
-
-    teams = []
-    with contextlib.suppress(github.UnknownObjectException):
-        teams = list(repository.get_teams())
-
-    return any(
-        team.name == "Admins" and team.permission == "admin" for team in teams
-    )
-
-
-def _has_codeowners(repository: Repository) -> bool:
-    """
-    Check if the repository has a CODEOWNERS file.
-    """
-
-    try:
-        repository.get_contents(".github/CODEOWNERS")
-        return True
-    except github.UnknownObjectException:
-        return False
-
-
 def org(organisation_name: str) -> None:
     """
     Generate a report for the given GitHub organisation.
@@ -90,37 +60,95 @@ def org(organisation_name: str) -> None:
         on.
     """
 
-    with utils.github_connection() as gh:
-        organisation = gh.get_organization(organisation_name)
-        repos = organisation.get_repos(sort="updated", direction="desc")
-        print(f"Found {repos.totalCount} repositories in {organisation_name}")
-        cols = {
-            True: utils.GREEN,
-            False: utils.RED,
-            None: utils.BOLD + utils.GREY,
+    gh = client.GitHubClient(api_token=os.environ["GITHUB_TOKEN"])
+
+    # Organisation details
+    print("Retrieving organisation details...")
+    resp = gh.graphql(
+        query=_read_query("organisation.graphql"),
+        variables={"organisation": organisation_name},
+    )
+    assert len(resp) == 1  # noqa: S101
+    organisation = resp[0]["organization"]
+    organisation_name = organisation["login"]
+    data_path = _make_dir(DATA / organisation_name)
+    (data_path / "organisation.json").write_text(
+        json.dumps(organisation, indent=2)
+    )
+
+    # Organisation teams
+    print("Retrieving organisation teams...")
+    resp = gh.graphql(
+        query=_read_query("organisation-teams.graphql"),
+        variables={"organisation": organisation_name},
+    )
+    teams, total_count = [], 0
+    for page in resp:
+        total_count = page["organization"]["teams"]["totalCount"]
+        teams.extend(page["organization"]["teams"]["nodes"])
+    (data_path / "organisation-teams.json").write_text(
+        json.dumps(teams, indent=2)
+    )
+    print(
+        f"Found {len(teams)} teams in {organisation_name} (expected {total_count})"
+    )
+
+    team_repo_permissions = dict()
+    for team in teams:
+        if team["repositories"]["totalCount"] >= 100:  # noqa: PLR2004
+            raise RuntimeError(
+                f"Not all repositories have been retrieved for team {team['slug']}"
+            )
+
+        team_repo_permissions[team["slug"]] = {
+            r["node"]["name"]: r["permission"]
+            for r in team["repositories"]["edges"]
         }
-        for repository in repos:
-            if repository.archived:
-                print(
-                    utils.colour(f"{repository.name}  (archived)", utils.GREY)
-                )
-                continue
 
-            def col(b: bool) -> str:
-                return utils.colour(str(b), cols[b])
+    # Organisation repositories
+    print("Retrieving organisation repositories...")
+    resp = gh.graphql(
+        query=_read_query("organisation-repositories.graphql"),
+        variables={"organisation": organisation_name},
+    )
+    repositories, total_count = [], 0
+    for page in resp:
+        total_count = page["organization"]["repositories"]["totalCount"]
+        repositories.extend(page["organization"]["repositories"]["nodes"])
+    (data_path / "organisation-repositories.json").write_text(
+        json.dumps(repositories, indent=2)
+    )
+    print(
+        f"Found {len(repositories)} repositories in {organisation_name} (expected {total_count})"
+    )
 
-            visibility = "🔒" if repository.visibility == "private" else "🌐"
+    # Print key repository details
+    for repository in sorted(
+        repositories,
+        key=lambda r: r["updatedAt"],
+        reverse=True,
+    ):
+        repo_name = repository["name"]
+        if repository["isArchived"]:
+            print(utils.colour(f"{repo_name}  (archived)", utils.GREY))
+            continue
 
-            parts = [
-                f"{utils.colour(repository.name, utils.BOLD)} {visibility}  (",
-                f"delete branch on merge: {col(repository.delete_branch_on_merge)}",
-                f", CODEOWNERS: {col(_has_codeowners(repository))}",
-                f", Admins: {col(_has_admins_as_admin(repository))}"
+        visibility = "🔒" if repository["visibility"] == "PRIVATE" else "🌐"
+        has_admins_as_admin = "ADMIN" == (
+            team_repo_permissions.get("admins", {}).get(repo_name, "")
+        )
+        parts = [
+            f"{utils.colour(repo_name, utils.BOLD)} {visibility}  (",
+            f"delete branch on merge: {_col_bool(repository['deleteBranchOnMerge'])}",
+            f", CODEOWNERS: {_col_bool(repository['planFeatures']['codeowners'])}",
+            (
+                f", Admins: {_col_bool(has_admins_as_admin)}"
                 if organisation_name == "TasmanAnalytics"
-                else "",
-                f")  https://github.com/{organisation_name}/{repository.name}",
-            ]
-            print("".join(parts))
+                else ""
+            ),
+            f")  {repository['url']}",
+        ]
+        print("".join(parts))
 
 
 def repo(repository_name: str) -> None:
@@ -130,22 +158,61 @@ def repo(repository_name: str) -> None:
     :param repository_name: The name of the GitHub repository to report on.
     """
 
-    with utils.github_connection() as gh:
-        repository = gh.get_repo(repository_name)
-        col = utils.GREEN if repository.delete_branch_on_merge else utils.RED
-        print(
-            f"{repository_name}  (delete branch on merge: {utils.colour(str(repository.delete_branch_on_merge), col)})"
-        )
+    gh = client.GitHubClient(api_token=os.environ["GITHUB_TOKEN"])
+    _org_name, _repo_name = repository_name.split("/")
+    variables = {"organisation": _org_name, "repository": _repo_name}
 
-        ctx = utils.Context(resource_path=utils.HERE / "data" / repository_name)
-        branches_file = _save_all(
-            context=ctx,
-            fetch=repository.get_branches,
-            filename="branches.jsonl",
+    # Repository details
+    print("Retrieving repository details...")
+    resp = gh.graphql(
+        query=_read_query("repository.graphql"),
+        variables=variables,
+    )
+    assert len(resp) == 1  # noqa: S101
+    repository = resp[0]["repository"]
+    repository_name = repository["nameWithOwner"]
+    data_path = _make_dir(DATA / repository_name)
+    (data_path / "repository.json").write_text(json.dumps(repository, indent=2))
+    print(
+        f"{repository_name}  (delete branch on merge: {_col_bool(repository['deleteBranchOnMerge'])})"
+    )
+
+    # Repository branches
+    print("Retrieving repository branches...")
+    resp = gh.graphql(
+        query=_read_query("repository-branches.graphql"),
+        variables=variables,
+    )
+    branches, total_count = [], 0
+    for page in resp:
+        total_count = page["repository"]["refs"]["totalCount"]
+        branches.extend(page["repository"]["refs"]["nodes"])
+    (data_path / "repository-branches.json").write_text(
+        json.dumps(branches, indent=2)
+    )
+    print(
+        f"Found {len(branches)} branches in {repository_name} (expected {total_count})"
+    )
+
+    # Repository pull requests
+    print("Retrieving repository pull requests...")
+    resp = gh.graphql(
+        query=_read_query("repository-pull-requests.graphql"),
+        variables=variables,
+    )
+    pull_requests, total_count = [], 0
+    for page in resp:
+        total_count = page["repository"]["pullRequests"]["totalCount"]
+        pull_requests.extend(page["repository"]["pullRequests"]["nodes"])
+    (data_path / "repository-pull-requests.json").write_text(
+        json.dumps(pull_requests, indent=2)
+    )
+    print(
+        f"Found {len(pull_requests)} pull requests in {repository_name} (expected {total_count})"
+    )
+    print(
+        _run_report(
+            branches_file=data_path / "repository-branches.json",
+            pull_requests_file=data_path / "repository-pull-requests.json",
         )
-        prs_file = _save_all(
-            context=ctx,
-            fetch=functools.partial(repository.get_pulls, state="all"),
-            filename="pull_requests.jsonl",
-        )
-        print(_run_report(branches_file, prs_file))
+    )
