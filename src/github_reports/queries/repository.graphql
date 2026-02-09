@@ -1,0 +1,149 @@
+query($organisation: String!, $repository: String!) {
+    repository(owner: $organisation, name: $repository) {
+        allowUpdateBranch
+        archivedAt
+        # assignableUsers(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        autoMergeAllowed
+        # branchProtectionRules(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        codeOfConduct {body id key name resourcePath url}
+        # codeowners(refName: ...) {...}
+        # collaborators(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # commitComments(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        contactLinks {about name url}
+        contributingGuidelines {body resourcePath url}
+        createdAt
+        databaseId
+        # defaultBranchRef {...}
+        deleteBranchOnMerge
+        # dependencyGraphManifests(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # deployKeys(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # deployments(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        description
+        descriptionHTML
+        # discussion(number: ...) {...}
+        # discussionCategories(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # discussionCategory(slug: ...)
+        # discussions(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        diskUsage
+        # environment(name: ...) {...}
+        # environments(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        forkCount
+        forkingAllowed
+        # forks(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        fundingLinks {platform url}
+        hasDiscussionsEnabled
+        hasIssuesEnabled
+        hasProjectsEnabled
+        hasSponsorshipsEnabled
+        hasVulnerabilityAlertsEnabled
+        hasWikiEnabled
+        homepageUrl
+        id
+        interactionAbility {expiresAt limit origin}
+        isArchived
+        isBlankIssuesEnabled
+        isDisabled
+        isEmpty
+        isFork
+        isInOrganization
+        isLocked
+        isMirror
+        isPrivate
+        isSecurityPolicyEnabled
+        isTemplate
+        isUserConfigurationRepository
+        # issue(number: ...) {...}
+        # issueOrPullRequest(number: ...) {...}
+        # issueTemplates {...}
+        # issueType(name: ...) {...}
+        # issueTypes(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # issues(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # label(name: ...) {...}
+        # labels(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # languages(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # latestRelease {...}
+        latestRelease {author {id login} description id name publishedAt tagName url}
+        # licenseInfo {...}
+        lockReason
+        # mentionableUsers(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        mergeCommitAllowed
+        mergeCommitMessage
+        mergeCommitTitle
+        # mergeQueue(branch: ...) {...}
+        # milestone(number: ...) {...}
+        # milestones(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        mirrorUrl
+        name
+        nameWithOwner
+        # object(expression: ..., oid: ...) {...}
+        openGraphImageUrl
+        # owner {...}
+        # packages(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # parent {...}
+        # pinnedDiscussions(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # pinnedEnvironments(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # pinnedIssues(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        planFeatures {codeowners draftPullRequests maximumAssignees maximumManualReviewRequests teamReviewRequests}
+        primaryLanguage {color id name}
+        # project(number: ...)  # DEPRECATED
+        # projectV2(number: ...)
+        # projects(...) {totalCount pageInfo {...} edges {...} nodes {...}}  # DEPRECATED
+        projectsResourcePath
+        projectsUrl
+        # projectsV2(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # pullRequest(number: ...) {...}
+        pullRequestTemplates {body filename}
+        # pullRequests(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        pushedAt
+        rebaseMergeAllowed
+        # recentProjects(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # ref(qualifiedName: ...) {...}
+        # refs(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # release(tagName: ...) {...}
+        # releases(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repositoryCustomPropertyValue(propertyName: ...) {...}
+        # repositoryCustomPropertyValues(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repositoryTopics(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        resourcePath
+        # ruleset(databaseId: ..., includeParents: true) {...}
+        # rulesets(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        securityPolicyUrl
+        shortDescriptionHTML(limit: 200)
+        squashMergeAllowed
+        squashMergeCommitMessage
+        squashMergeCommitTitle
+        # squashPrTitleUsedAsDefault  # DEPRECATED
+        sshUrl
+        stargazerCount
+        # stargazers(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # submodules(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # suggestedActors(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        tempCloneToken
+        # templateRepository {...}
+        updatedAt
+        url
+        usesCustomOpenGraphImage
+        viewerCanAdminister
+        # viewerCanCreateProjects  # DEPRECATED
+        # viewerCanSeeIssueFields
+        # viewerCanSubscribe
+        # viewerCanUpdateTopics
+        # viewerDefaultCommitEmail
+        # viewerDefaultMergeMethod
+        # viewerHasStarred
+        # viewerPermission
+        # viewerPossibleCommitEmails
+        # viewerSubscription
+        visibility
+        # vulnerabilityAlert(number: ...) {...}
+        # vulnerabilityAlerts(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # watchers(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        webCommitSignoffRequired
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}

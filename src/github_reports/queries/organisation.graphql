@@ -1,0 +1,99 @@
+query($organisation: String!) {
+    organization(login: $organisation) {
+        announcementBanner {createdAt expiresAt isUserDismissible message}
+        anyPinnableItems  # (type: ...)
+        archivedAt
+        # auditLog(...) {totalCount pageInfo {...} edges {} nodes {}}
+        avatarUrl  # (size: ...)
+        createdAt
+        databaseId
+        description
+        descriptionHTML
+        # domains(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        email
+        # enterpriseOwners(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        estimatedNextSponsorsPayoutInCents
+        hasSponsorsListing
+        id
+        interactionAbility {expiresAt limit origin}
+        # ipAllowListEnabledSetting  # requires admin permissions
+        # ipAllowListEntries(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # ipAllowListForInstalledAppsEnabledSetting  # requires admin permissions
+        # isSponsoredBy(accountLogin: ...)
+        isSponsoringViewer
+        isVerified
+        # issueTypes(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # itemShowcase {hasPinnedItems items(...) {totalCount pageInfo {...} edges {...} nodes {...}}}
+        # lifetimeReceivedSponsorshipValues(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        location
+        login
+        # mannequins(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # memberStatuses(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # membersCanForkPrivateRepositories  # requires admin permissions
+        # membersWithRole(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        monthlyEstimatedSponsorsIncomeInCents
+        name
+        newTeamResourcePath
+        newTeamUrl
+        # notificationDeliveryRestrictionEnabledSetting  # requires admin permissions
+        organizationBillingEmail
+        # packages(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # pendingMembers(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # pinnableItems(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # pinnedItems(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        pinnedItemsRemaining
+        # project(number: ...)  # DEPRECATED
+        # projectV2(number: ...)
+        # projects(...) {totalCount pageInfo {...} edges {...} nodes {...}}  # DEPRECATED
+        projectsResourcePath
+        projectsUrl
+        # projectsV2(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # recentProjects(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repositories(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repository(followRenames: true, name: ...) {...}
+        # repositoryCustomProperties(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repositoryCustomProperty(propertyName: ...)
+        # repositoryDiscussionComments(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repositoryDiscussions(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # repositoryMigrations(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # requiresTwoFactorAuthentication  # requires admin permissions
+        resourcePath
+        # ruleset(databaseId: ..., includeParents: true)
+        # rulesets(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # samlIdentityProvider {...}
+        # sponsoring(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # sponsors(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # sponsorsActivities(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # sponsorsListing {...}
+        # sponsorshipForViewerAsSponsor(activeOnly: true) {...}
+        # sponsorshipForViewerAsSponsorable(activeOnly: true) {...}
+        # sponsorshipNewsletters(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # sponsorshipsAsMaintainer(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # sponsorshipsAsSponsor(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        # team(slug: ...) {...}
+        # teams(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+        teamsResourcePath
+        teamsUrl
+        # totalSponsorshipAmountAsSponsorInCents(sponsorableLogins: ..., since: ..., until, ...)
+        twitterUsername
+        updatedAt
+        url
+        # viewerCanAdminister
+        # viewerCanChangePinnedItems
+        # viewerCanCreateProjects
+        # viewerCanCreateRepositories
+        # viewerCanCreateTeams
+        # viewerCanSponsor
+        # viewerIsAMember
+        # viewerIsFollowing
+        # viewerIsSponsoring
+        # webCommitSignoffRequired  # requires admin permissions
+        websiteUrl
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}

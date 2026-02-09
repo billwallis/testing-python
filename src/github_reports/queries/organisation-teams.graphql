@@ -1,0 +1,70 @@
+query($organisation: String!, $page_size: Int!, $page_after: String) {
+    organization(login: $organisation) {
+        id
+        name
+        teams(first: $page_size, after: $page_after) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+                hasPreviousPage
+                hasNextPage
+            }
+            nodes {
+                # ancestors(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                avatarUrl
+                # childTeams(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                combinedSlug
+                createdAt
+                databaseId
+                description
+                editTeamResourcePath
+                editTeamUrl
+                id
+                # invitations(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # memberStatuses(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # members(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                membersResourcePath
+                membersUrl
+                name
+                newTeamResourcePath
+                newTeamUrl
+                notificationSetting
+                # organization {...}
+                # parentTeam {...}
+                privacy
+                # projectV2(number: ...) {...}
+                # projectsV2(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # repositories(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                repositories(first: 100) {
+                    totalCount
+                    edges {
+                        node {id name nameWithOwner}
+                        permission
+                    }
+                }
+                repositoriesResourcePath
+                repositoriesUrl
+                resourcePath
+                reviewRequestDelegationAlgorithm
+                reviewRequestDelegationEnabled
+                reviewRequestDelegationMemberCount
+                reviewRequestDelegationNotifyTeam
+                slug
+                teamsResourcePath
+                teamsUrl
+                updatedAt
+                url
+                # viewerCanAdminister
+                # viewerCanSubscribe
+                # viewerSubscription
+            }
+        }
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}

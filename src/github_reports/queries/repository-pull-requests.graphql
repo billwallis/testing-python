@@ -1,0 +1,185 @@
+query($organisation: String!, $repository: String!, $page_size: Int!, $page_after: String) {
+    repository(owner: $organisation, name: $repository) {
+        id
+        name
+        nameWithOwner
+        pullRequests(orderBy: {field: CREATED_AT, direction: DESC}, first: $page_size, after: $page_after) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+                hasPreviousPage
+                hasNextPage
+            }
+            nodes {
+                activeLockReason
+                additions
+                # assignedActors(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # assignees(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                author {login avatarUrl url}
+                authorAssociation
+                # autoMergeRequest {
+                #     authorEmail
+                #     commitBody
+                #     commitHeadline
+                #     enabledAt
+                #     # enabledBy {...}
+                #     mergeMethod
+                #     # pullRequest {...}
+                # }
+                baseRef {
+                    id
+                    name
+                    prefix
+                    target {
+                        abbreviatedOid
+                        commitResourcePath
+                        commitUrl
+                        id
+                        oid
+                        # repository {...}
+                    }
+                }
+                baseRefName
+                baseRefOid
+                # baseRepository {...}
+                body
+                bodyHTML
+                bodyText
+                canBeRebased
+                changedFiles
+                checksResourcePath
+                checksUrl
+                closed
+                closedAt
+                # closingIssuesReferences(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # comments(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                commits(first: 1) {
+                    totalCount
+                    nodes {
+                        id
+                        commit {
+                            oid
+                            commitUrl
+                            committedDate
+                            message
+                            committer {name}
+                        }
+                    }
+                }
+                createdAt
+                createdViaEmail
+                # databaseId  # DEPRECATED
+                deletions
+                editor {login avatarUrl url}
+                # files(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                fullDatabaseId
+                headRef {
+                    id
+                    name
+                    prefix
+                    target {
+                        abbreviatedOid
+                        commitResourcePath
+                        commitUrl
+                        id
+                        oid
+                        # repository {...}
+                    }
+                }
+                headRefName
+                headRefOid
+                # headRepository {...}
+                headRepositoryOwner {login avatarUrl url}
+                # hovercard(includeNotificationContexts: true) {
+                #     contexts {message octicon}
+                # }
+                id
+                includesCreatedEdit
+                isCrossRepository
+                isDraft
+                isInMergeQueue
+                isMergeQueueEnabled
+                isReadByViewer
+                # labels(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                lastEditedAt
+                # latestOpinionatedReviews(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # latestReviews(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                locked
+                maintainerCanModify
+                mergeCommit {id oid authoredDate message}
+                # mergeQueue {...}
+                # mergeQueueEntry {...}
+                mergeStateStatus
+                mergeable
+                merged
+                mergedAt
+                mergedBy {login avatarUrl url}
+                # milestone {...}
+                number
+                # participants(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                permalink
+                # potentialMergeCommit {...}
+                # projectCards(...) {totalCount pageInfo {...} edges {...} nodes {...}}  # DEPRECATED
+                # projectItems(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # projectV2(number: ...) {...}
+                # projectsV2(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                publishedAt
+                # reactionGroups {...}
+                # reactions(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # repository {...}
+                resourcePath
+                revertResourcePath
+                revertUrl
+                reviewDecision
+                # reviewRequests(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # reviewThreads(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # reviews(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                state
+                statusCheckRollup {
+                    commit {id oid authoredDate message}
+                    # contexts(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                    id
+                    state
+                }
+                # suggestedActors(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # suggestedReviewerActors(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                suggestedReviewers {isAuthor isCommenter reviewer {avatarUrl id login name}}
+                # timeline(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # timelineItems(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                title
+                titleHTML
+                totalCommentsCount
+                updatedAt
+                url
+                # userContentEdits(...) {totalCount pageInfo {...} edges {...} nodes {...}}
+                # viewerCanApplySuggestion
+                # viewerCanClose
+                # viewerCanDeleteHeadRef
+                # viewerCanDisableAutoMerge
+                # viewerCanEditFiles
+                # viewerCanEnableAutoMerge
+                # viewerCanLabel
+                # viewerCanMergeAsAdmin
+                # viewerCanReact
+                # viewerCanReopen
+                # viewerCanSubscribe
+                # viewerCanUpdate
+                # viewerCanUpdateBranch
+                # viewerCannotUpdateReasons
+                # viewerDidAuthor
+                # viewerLatestReview {...}
+                # viewerLatestReviewRequest {...}
+                # viewerMergeBodyText
+                # viewerMergeHeadlineText
+                # viewerSubscription
+            }
+        }
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}

@@ -1,0 +1,74 @@
+query($organisation: String!, $page_size: Int!, $page_after: String) {
+    organization(login: $organisation) {
+        id
+        login
+        repositories(first: $page_size, after: $page_after) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+                hasPreviousPage
+                hasNextPage
+            }
+            nodes {
+                archivedAt
+                autoMergeAllowed
+                createdAt
+                databaseId
+                deleteBranchOnMerge
+                description
+                diskUsage
+                forkCount
+                forkingAllowed
+                hasDiscussionsEnabled
+                hasIssuesEnabled
+                hasProjectsEnabled
+                hasSponsorshipsEnabled
+                hasVulnerabilityAlertsEnabled
+                hasWikiEnabled
+                homepageUrl
+                id
+                isArchived
+                isBlankIssuesEnabled
+                isDisabled
+                isEmpty
+                isFork
+                isInOrganization
+                isLocked
+                isMirror
+                isPrivate
+                isSecurityPolicyEnabled
+                isTemplate
+                isUserConfigurationRepository
+                latestRelease {id name publishedAt tagName url}
+                lockReason
+                mergeCommitAllowed
+                mergeCommitMessage
+                mergeCommitTitle
+                name
+                nameWithOwner
+                openGraphImageUrl
+                planFeatures {codeowners draftPullRequests maximumAssignees maximumManualReviewRequests teamReviewRequests}
+                primaryLanguage {color id name}
+                pushedAt
+                rebaseMergeAllowed
+                resourcePath
+                squashMergeAllowed
+                squashMergeCommitMessage
+                squashMergeCommitTitle
+                stargazerCount
+                updatedAt
+                url
+                usesCustomOpenGraphImage
+                visibility
+                webCommitSignoffRequired
+            }
+        }
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}
