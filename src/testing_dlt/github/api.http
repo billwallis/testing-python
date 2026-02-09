@@ -1,0 +1,200 @@
+#@base_url="https://api.github.com/graphql"
+#@auth="Bearer GITHUB_TOKEN"
+
+
+### Rate limit
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}
+
+
+### Pull requests
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+  repository(owner: "TasmanAnalytics", name: "dbt-datadict") {
+    pullRequests(first: 50, orderBy: {field: CREATED_AT, direction: DESC}) {
+      totalCount
+      pageInfo {
+        endCursor
+        startCursor
+      }
+      nodes {
+        # id
+        number
+        url
+        title
+        body
+        author {login avatarUrl url}
+        authorAssociation
+        closed
+        closedAt
+        createdAt
+        state
+        updatedAt
+        commits(first: 50) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+            }
+            nodes {
+                id
+                commit {
+                    oid
+                    commitUrl
+                    message
+                    committer {name}
+                    committedDate
+                }
+            }
+        }
+      }
+    }
+  }
+}
+
+
+### Deployments
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+    repository(owner: "TasmanAnalytics", name: "dbt-datadict") {
+        deployments(first: 50) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+            }
+            nodes {
+                id
+                commit {id oid commitUrl committedDate}
+                environment
+                state
+                task
+                createdAt
+                creator {login avatarUrl url}
+                updatedAt
+                latestStatus {
+                    id
+                    createdAt
+                    updatedAt
+                    state
+                }
+            }
+        }
+    }
+}
+
+
+### Stargazers
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+    repository(owner: "TasmanAnalytics", name: "dbt-datadict") {
+        name
+        owner {id login}
+        stargazers(first: 50, orderBy: {field: STARRED_AT, direction: DESC}) {
+            pageInfo {
+                endCursor
+                startCursor
+            }
+            edges {
+                starredAt
+                node {
+                    login
+                    avatarUrl
+                    url
+                }
+            }
+        }
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}
+
+
+### Commits
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+    repository(owner: "TasmanAnalytics", name: "dbt-datadict") {
+        defaultBranchRef {
+            target {
+                ... on Commit {
+                    history(first: 50) {
+                        edges {
+                            node {
+                                ... on Commit {
+                                    id
+                                    oid
+                                    commitUrl
+                                    committedDate
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+### Branches (bit naff)
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+    repository(owner: "TasmanAnalytics", name: "dbt-datadict") {
+        refs(first: 50, refPrefix: "refs/heads/") {
+            nodes {
+                id
+                name
+            }
+        }
+    }
+}
+
+
+### Repositories
+GRAPHQL {{ base_url }}
+Authorization: {{ auth }}
+
+query {
+    organization(login: "TasmanAnalytics") {
+        id
+        login
+        name
+#        repositories(first: 50, isArchived: false) {
+        repositories(first: 50) {
+            totalCount
+            pageInfo {
+                endCursor
+                startCursor
+            }
+            nodes{
+                id
+                name
+                url
+                isArchived
+            }
+        }
+    }
+}
