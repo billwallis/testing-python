@@ -95,7 +95,7 @@ def org(organisation_name: str) -> None:
 
     team_repo_permissions = dict()
     for team in teams:
-        if team["repositories"]["totalCount"] >= 100:  # noqa: PLR2004
+        if team["repositories"]["totalCount"] > 100:  # noqa: PLR2004
             raise RuntimeError(
                 f"Not all repositories have been retrieved for team {team['slug']}"
             )

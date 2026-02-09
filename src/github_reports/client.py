@@ -34,8 +34,8 @@ def retry(exceptions, times: int = MAX_RETRIES):
                     return func(*args, **kwargs)
                 except exceptions as e:
                     print(
-                        f"Exception thrown {e.__name__} when attempting to run %s, attempt "
-                        "%d of %d" % (func, attempt, times)
+                        f"Exception thrown {type(e).__name__} when attempting to run %s,"
+                        " attempt %d of %d" % (func, attempt, times)
                     )
                     attempt += 1
             return func(*args, **kwargs)
@@ -106,16 +106,13 @@ class GitHubClient:
     def _graphql(
         self,
         query: str,
-        variables: dict[str, Any] | None = None,
+        variables: dict[str, Any],
     ) -> Any:
         """
         Execute a GraphQL query against GitHub.
 
         https://docs.github.com/en/graphql/reference
         """
-
-        if variables is None:
-            variables = {}
 
         response = requests.post(
             url=GRAPHQL_API_BASE_URL,
@@ -139,6 +136,9 @@ class GitHubClient:
 
         Paginated results are continued until all results have been retrieved.
         """
+
+        if variables is None:
+            variables = {}
 
         query_vars = {
             "page_size": DEFAULT_PAGE_SIZE,
