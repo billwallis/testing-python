@@ -18,7 +18,7 @@ class Loan:
     terms: int
     repayments: list[Repayment] = dataclasses.field(default_factory=list)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         repayment_amount = self.amount / self.terms
         for i in range(1, 1 + self.terms):
             self.repayments.append(
@@ -26,7 +26,7 @@ class Loan:
             )
 
 
-def main():
+def main() -> None:
     loan = Loan(1, 1000, 10)
 
     # pay off three repayments
@@ -55,7 +55,7 @@ def loan_repayments_as_csv(loan: Loan) -> str:
     return csv
 
 
-def main_workaround():
+def main_workaround() -> None:
     loan = Loan(1, 1000, 10)
 
     # pay off three repayments

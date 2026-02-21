@@ -18,16 +18,19 @@ DEFAULT_PAGE_SIZE = 50
 MAX_RETRIES = 5
 
 
-def retry(exceptions, times: int = MAX_RETRIES):
+def retry(
+    exceptions: type[Exception] | tuple[type[Exception], ...],
+    times: int = MAX_RETRIES,
+) -> Callable[..., Callable[..., Any]]:
     """
     Source - https://stackoverflow.com/a/64030200
     Posted by mrkiril
     Retrieved 2026-02-09, License - CC BY-SA 4.0
     """
 
-    def decorator(func: Callable):
+    def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             attempt = 0
             while attempt < times:
                 try:
@@ -81,12 +84,12 @@ class RateLimit:
             reset_at=rate_limit.get("resetAt", str(datetime.datetime.now())),
         )
 
-    def display(self):
+    def display(self) -> str:
         return f"cost {self.cost}, remaining {self.remaining}, reset at {self.reset_at}"
 
 
 class GitHubClient:
-    def __init__(self, api_token: str):
+    def __init__(self, api_token: str) -> None:
         self._api_token = api_token
 
     @property

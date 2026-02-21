@@ -52,7 +52,7 @@ def _print_values(content: str, loader: Callable) -> None:
                 print(f"    {k}: {colour(v, col)}")
 
 
-def bools_example(content: str):
+def bools_example(content: str) -> None:
     """
     Compare boolean value serialisation between ruamel.yaml and PyYAML.
     """
@@ -64,7 +64,7 @@ def bools_example(content: str):
     _print_values(content, yaml.safe_load_all)
 
 
-def versioned_example(content: str):
+def versioned_example(content: str) -> None:
     """
     Compare versioned YAML tags between ruamel.yaml and PyYAML.
     """
@@ -76,7 +76,7 @@ def versioned_example(content: str):
     _print_values(content, yaml.safe_load_all)
 
 
-def set_and_omap_example(content: str):
+def set_and_omap_example(content: str) -> None:
     """
     Compare sets and ordered map YAML tags between ruamel.yaml and PyYAML.
     """
@@ -103,7 +103,7 @@ class Model:
     columns: list[str]
 
 
-def python_example__simple(content: str):
+def python_example__simple(content: str) -> None:
     """
     Serialise YAML content to a Python object.
     """
@@ -115,7 +115,7 @@ def python_example__simple(content: str):
     print("   ", yaml.load(content, Loader=yaml.Loader))  # noqa: S506
 
 
-def python_example__complex():
+def python_example__complex() -> None:
     """
     Outsource to:
 
@@ -123,7 +123,7 @@ def python_example__complex():
     """
 
 
-def main():
+def main() -> None:
     bools_example((HERE / "bools.yaml").read_text())
     # bools_example((HERE / "bools-tagged.yaml").read_text())
     # versioned_example((HERE / "versioned-1.1.yaml").read_text())

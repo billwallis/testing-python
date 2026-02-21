@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import Any
 
 RED = "\033[1;31m"
 GREEN = "\033[1;32m"
@@ -20,7 +21,7 @@ def colour(text: str, colour_: str) -> str:
 class Context:
     _resource_path: pathlib.Path
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         self._resource_path = HERE
 
         for key, value in kwargs.items():
@@ -37,5 +38,5 @@ class Context:
 
 
 class ReprEncoder(json.JSONEncoder):
-    def default(self, o):
+    def default(self, o: object) -> str:
         return repr(o)
