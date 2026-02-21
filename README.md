@@ -14,11 +14,10 @@
 
 Testing stuff with Python.
 
-## Quick start
+## Contributing
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and then enable [pre-commit](https://pre-commit.com/):
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and then install the dependencies:
 
-```shell
-uv sync
-pre-commit install --install-hooks
+```bash
+uvx --from poethepoet poe install
 ```
