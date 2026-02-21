@@ -54,10 +54,9 @@ install.shell = """
     uv sync --refresh
     uv run pre-commit install --install-hooks
 """
-update.shell = """
+upgrade.shell = """
     uv sync --refresh --upgrade
     uv run pre-commit autoupdate
-    uv run pre-commit install --install-hooks
 """
 
 [tool.poe.tasks.lint]
