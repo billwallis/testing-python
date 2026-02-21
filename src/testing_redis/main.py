@@ -18,7 +18,7 @@ def new_redis_client() -> redis.Redis:
     )
 
 
-def basic_example():
+def basic_example() -> None:
     print("\nBasic example")
 
     redis_client = new_redis_client()
@@ -26,7 +26,7 @@ def basic_example():
     print(redis_client.get("foo"))
 
 
-def pubsub_example():
+def pubsub_example() -> None:
     print("\nPubSub example")
 
     redis_client = new_redis_client()
@@ -53,7 +53,7 @@ async def reader(channel: redis.client.PubSub) -> None:
                 break
 
 
-async def async_example():
+async def async_example() -> None:
     print("\nAsync PubSub example")
     redis_client = await redis.asyncio.from_url("redis://localhost:6379")
     async with redis_client.pubsub() as pubsub:
@@ -69,7 +69,7 @@ async def async_example():
         await future
 
 
-def key_expiration_example():
+def key_expiration_example() -> None:
     print("\nKey expiration example")
 
     redis_client = new_redis_client()
@@ -79,7 +79,7 @@ def key_expiration_example():
     print(redis_client.get("reservation:1"))
 
 
-def main():
+def main() -> None:
     basic_example()
     pubsub_example()
     asyncio.run(async_example())

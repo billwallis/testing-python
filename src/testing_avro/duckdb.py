@@ -38,7 +38,7 @@ def create_avro_file(target: pathlib.Path, data: list) -> None:
             writer.append(record)
 
 
-def main():
+def main() -> None:
     create_avro_file(
         target=HERE / "models-01.avro",
         data=[

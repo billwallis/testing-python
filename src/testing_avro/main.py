@@ -33,7 +33,7 @@ def get_schema(schema_name: str) -> avro.schema.Schema:
     )
 
 
-def create_avro_file():
+def create_avro_file() -> None:
     """
     Create an Avro file with some records.
     """
@@ -52,7 +52,7 @@ def create_avro_file():
     writer.append(
         {
             "name": "Ben",
-            "favorite_number": random.randint(1, 10),
+            "favorite_number": random.randint(1, 10),  # noqa: S311
             "favorite_color": "red",
         }
     )
@@ -65,7 +65,7 @@ def create_avro_file():
     appender.append(
         {
             "name": "Chrissie",
-            "favorite_number": random.randint(1, 10),
+            "favorite_number": random.randint(1, 10),  # noqa: S311
         }
     )
     appender.append(
@@ -76,7 +76,7 @@ def create_avro_file():
     appender.close()
 
 
-def print_contents(schema: avro.schema.Schema | None = None):
+def print_contents(schema: avro.schema.Schema | None = None) -> None:
     """
     Print the contents of the Avro file using the given schema.
     """
@@ -89,7 +89,7 @@ def print_contents(schema: avro.schema.Schema | None = None):
     reader.close()
 
 
-def main():
+def main() -> None:
     create_avro_file()
 
     print("\nUsing default schema:")

@@ -425,7 +425,7 @@ wheels = [
 [[package]]
 name = "testing-python"
 version = "0.0.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "arguably" },
     { name = "avro" },
@@ -465,8 +465,8 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "poethepoet", specifier = ">=0.36.0" },
-    { name = "pre-commit", specifier = ">=4.2.0" },
+    { name = "poethepoet", specifier = ">=0.41.0" },
+    { name = "pre-commit", specifier = ">=4.5.1" },
 ]
 
 [[package]]

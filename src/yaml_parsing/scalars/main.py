@@ -5,7 +5,7 @@ import yaml
 HERE = pathlib.Path(__file__).parent
 
 
-def main():
+def main() -> None:
     raw_content = (HERE / "ahoy.yaml").read_text(encoding="utf-8")
     # raw_content = (HERE / "real-example.yaml").read_text(encoding="utf-8")
     contents = yaml.safe_load_all(raw_content)

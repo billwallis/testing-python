@@ -25,7 +25,7 @@ def migrate_scripts(sql_dir: pathlib.Path) -> None:
         file.write_text(";\n\n".join(migrated))
 
 
-def main():
+def main() -> None:
     migrate_scripts(HERE / "models")
 
 

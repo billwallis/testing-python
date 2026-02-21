@@ -57,7 +57,7 @@ def print_contents() -> None:
     [print(row) for row in pyarrow.orc.read_table(TARGET).to_pylist()]
 
 
-def main():
+def main() -> None:
     create_orc_file()
     # print_metadata()
     print_contents()

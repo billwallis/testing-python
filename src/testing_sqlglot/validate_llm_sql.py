@@ -116,7 +116,7 @@ def validate_query_objects(
             )
 
 
-def main():
+def main() -> None:
     """
     Validate that an "LLM-generated" SQL query is referencing objects which
     exist in the database.
