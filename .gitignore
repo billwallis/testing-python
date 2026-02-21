@@ -3,6 +3,10 @@
 .idea/
 .DS_Store
 
+# Data files
+*.*db
+*.*db.wal
+
 # IntelliJ project files
 .run/
 *.iml
