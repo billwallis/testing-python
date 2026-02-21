@@ -4,6 +4,9 @@ ci:
   autoupdate_schedule: quarterly
   skip: ["identity", "uv-lock"]
 
+default_install_hook_types: ["pre-commit", "pre-push"]
+default_stages: ["pre-commit"]
+
 repos:
   - repo: meta
     hooks:
@@ -25,6 +28,9 @@ repos:
         name: Check for large files
       - id: check-json
         name: Check JSON files are valid and parseable
+      - id: check-yaml
+        name: Check YAML files are valid and parseable
+        exclude: ^src/(document_formats|yaml_parsing)/.*$
       - id: check-toml
         name: Check TOML files are valid and parseable
       - id: check-ast
@@ -58,3 +64,22 @@ repos:
     hooks:
       - id: tidy-gitkeep
         name: Remove redundant .gitkeep files
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.36.2
+    hooks:
+      - id: check-github-workflows
+      - id: check-compose-spec
+
+  - repo: local
+    hooks:
+      - id: check-pyproject-schema
+        name: Validate pyproject.toml schema
+        entry: check-jsonschema
+        pass_filenames: true
+        language: python
+        additional_dependencies: ["check-jsonschema==0.35.0"]
+        files: pyproject.toml
+        args: ["--schemafile", "https://json.schemastore.org/pyproject.json"]
+        # This calls a remote URL, so run on pre-push to avoid slowing down commits
+        stages: ["pre-push"]
