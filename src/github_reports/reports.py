@@ -6,13 +6,14 @@ from typing import Any
 import dotenv
 import duckdb
 
-from src.github_reports import client, utils
+from github_reports import client, utils
 
 dotenv.load_dotenv()
 
 HERE = pathlib.Path(__file__).parent
 QUERIES = HERE / "queries"
 DATA = HERE / "data"
+GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 
 
 def _col_bool(b: bool | None) -> str:
@@ -60,7 +61,7 @@ def org(organisation_name: str) -> None:
         on.
     """
 
-    gh = client.GitHubClient(api_token=os.environ["GITHUB_TOKEN"])
+    gh = client.GitHubClient(api_token=GITHUB_TOKEN)
 
     # Organisation details
     print("Retrieving organisation details...")
@@ -151,6 +152,29 @@ def org(organisation_name: str) -> None:
         print("".join(parts))
 
 
+def user(username: str) -> None:
+    """
+    Generate a report for the given GitHub user.
+
+    :param username: The username of the GitHub user to report on.
+    """
+
+    gh = client.GitHubClient(api_token=GITHUB_TOKEN)
+    variables = {"user": username}
+
+    # User details
+    print("Retrieving user details...")
+    resp = gh.graphql(
+        query=_read_query("user.graphql"),
+        variables=variables,
+    )
+    assert len(resp) == 1  # noqa: S101
+    user_ = resp[0]["user"]
+    user_name = user_["login"]
+    data_path = _make_dir(DATA / user_name)
+    (data_path / "user.json").write_text(json.dumps(user_, indent=2))
+
+
 def repo(repository_name: str) -> None:
     """
     Generate a report for the given GitHub repository.
@@ -158,7 +182,7 @@ def repo(repository_name: str) -> None:
     :param repository_name: The name of the GitHub repository to report on.
     """
 
-    gh = client.GitHubClient(api_token=os.environ["GITHUB_TOKEN"])
+    gh = client.GitHubClient(api_token=GITHUB_TOKEN)
     _org_name, _repo_name = repository_name.split("/")
     variables = {"organisation": _org_name, "repository": _repo_name}
 
