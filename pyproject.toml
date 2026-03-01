@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
 
 [build-system]
-requires = ["uv_build>=0.8.2,<1.0.0"]
+requires = ["uv_build>=0.8"]
 build-backend = "uv_build"
 
 [project]
@@ -33,23 +33,23 @@ gh-report = "src.github_reports.__main__:arguably.run"
 
 [dependency-groups]
 dev = [
-    "poethepoet>=0.41.0",
+    "poethepoet>=0.42.1",
     "pre-commit>=4.5.1",
 ]
 
 
 [tool.uv]
-required-version = ">=0.8,<1.0"
+required-version = ">=0.8"
 default-groups = "all"
-package = false
+package = true
 
-#[tool.uv.build-backend]
-#namespace = true
+[tool.uv.build-backend]
+namespace = true
 
 
 [tool.poe]
 verbosity = -1
-#envfile = ".env"
+envfile.optional = ".env"
 
 [tool.poe.tasks]
 install.shell = """
