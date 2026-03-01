@@ -174,6 +174,68 @@ def user(username: str) -> None:
     data_path = _make_dir(DATA / user_name)
     (data_path / "user.json").write_text(json.dumps(user_, indent=2))
 
+    # User repositories
+    print("Retrieving user repositories...")
+    resp = gh.graphql(
+        query=_read_query("user-repositories.graphql"),
+        variables={"user": user_name},
+    )
+    repositories, total_count = [], 0
+    for page in resp:
+        total_count = page["user"]["repositories"]["totalCount"]
+        repositories.extend(page["user"]["repositories"]["nodes"])
+    (data_path / "user-repositories.json").write_text(
+        json.dumps(repositories, indent=2)
+    )
+    print(
+        f"Found {len(repositories)} repositories in {user_name} (expected {total_count})"
+    )
+
+    user_repos = [r for r in repositories if r["owner"]["login"] == username]
+    other_repos = [r for r in repositories if r["owner"]["login"] != username]
+
+    # Print user repository details
+    print(utils.colour("\nUser repos...", utils.BLUE + utils.BOLD))
+    for repository in sorted(
+        user_repos,
+        key=lambda r: r["updatedAt"],
+        reverse=True,
+    ):
+        repo_name = repository["name"]
+        if repository["isArchived"]:
+            print(utils.colour(f"{repo_name}  (archived)", utils.GREY))
+            continue
+
+        visibility = "🔒" if repository["visibility"] == "PRIVATE" else "🌐"
+        parts = [
+            f"{utils.colour(repo_name, utils.BOLD)} {visibility}  (",
+            f"delete branch on merge: {_col_bool(repository['deleteBranchOnMerge'])}",
+            f", CODEOWNERS: {_col_bool(repository['planFeatures']['codeowners'])}",
+            f")  {repository['url']}",
+        ]
+        print("".join(parts))
+
+    # Print user contributing repository details
+    print(utils.colour("\nContributing repos...", utils.BLUE + utils.BOLD))
+    for repository in sorted(
+        other_repos,
+        key=lambda r: r["updatedAt"],
+        reverse=True,
+    ):
+        repo_name = repository["name"]
+        if repository["isArchived"]:
+            print(utils.colour(f"{repo_name}  (archived)", utils.GREY))
+            continue
+
+        visibility = "🔒" if repository["visibility"] == "PRIVATE" else "🌐"
+        parts = [
+            f"{utils.colour(repo_name, utils.BOLD)} {visibility}  (",
+            f"delete branch on merge: {_col_bool(repository['deleteBranchOnMerge'])}",
+            f", CODEOWNERS: {_col_bool(repository['planFeatures']['codeowners'])}",
+            f")  {repository['url']}",
+        ]
+        print("".join(parts))
+
 
 def repo(repository_name: str) -> None:
     """

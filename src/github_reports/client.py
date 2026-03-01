@@ -159,7 +159,9 @@ class GitHubClient:
                 variables=query_vars,
             )
             if response.status_code != http.HTTPStatus.OK:
-                raise ValueError(json.dumps(response, indent=2))
+                raise ValueError(response.text)
+            if errors := response.json().get("errors"):
+                raise ValueError(json.dumps(errors, indent=2))
 
             data = response.json()["data"]
             pages.append(data)
