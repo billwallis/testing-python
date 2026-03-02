@@ -1,0 +1,122 @@
+query($user: String!) {
+    user(login: $user) {
+        # anyPinnableItems(type: ...)
+        # avatarUrl(size: ...)
+        bio
+        bioHTML
+        # canReceiveOrganizationEmailsWhenNotificationsRestricted(login: ...)
+        # commitComments(...) {totalCount pageInfo {} edges {} nodes {}}
+        company
+        companyHTML
+        # contributionsCollection(organisationId: ..., from: ..., to: ...)
+        # copilotEndpoints {api originTracker proxy telemetry}
+        createdAt
+        databaseId
+        email
+        # enterprises(...) {totalCount pageInfo {} edges {} nodes {}}
+        estimatedNextSponsorsPayoutInCents
+        # followers(...) {totalCount pageInfo {} edges {} nodes {}}
+        # following(...) {totalCount pageInfo {} edges {} nodes {}}
+        # gist(name: ...) {}
+        # gistComments(...) {totalCount pageInfo {} edges {} nodes {}}
+        # gists(...) {totalCount pageInfo {} edges {} nodes {}}
+        hasSponsorsListing
+        # hovercard(primarySubjectId: ...) {}
+        id
+        interactionAbility {expiresAt limit origin}
+        isBountyHunter
+        isCampusExpert
+        isDeveloperProgramMember
+        isEmployee
+        # isFollowingViewer
+        isGitHubStar
+        isHireable
+        isSiteAdmin
+        # isSponsoredBy(accountLogin: ...)
+        # isSponsoringViewer
+        # isViewer
+        # issueComments(...) {totalCount pageInfo {} edges {} nodes {}}
+        # issues(...) {totalCount pageInfo {} edges {} nodes {}}
+        itemShowcase {
+            hasPinnedItems
+            # items(...) {totalCount pageInfo {} edges {} nodes {}}
+        }
+        # lifetimeReceivedSponsorshipValues(...) {totalCount pageInfo {} edges {} nodes {}}
+        # lists(...) {totalCount pageInfo {} edges {} nodes {}}
+        location
+        login
+        monthlyEstimatedSponsorsIncomeInCents
+        name
+        # organization(login: ...) {}
+        # organizationVerifiedDomainEmails(login: ...)
+        # organizations(...) {totalCount pageInfo {} edges {} nodes {}}
+        # packages(...) {totalCount pageInfo {} edges {} nodes {}}
+        # pinnableItems(...) {totalCount pageInfo {} edges {} nodes {}}
+        # pinnedItems(...) {totalCount pageInfo {} edges {} nodes {}}
+        pinnedItemsRemaining
+        # project(number: ...)  # DEPRECATED
+        # projectV2(number: ...)
+        # projects(...) {totalCount pageInfo {} edges {} nodes {}}  # DEPRECATED
+        projectsResourcePath
+        projectsUrl
+        # projectsV2(...) {totalCount pageInfo {} edges {} nodes {}}
+        pronouns
+        # publicKeys(...) {totalCount pageInfo {} edges {} nodes {}}
+        # pullRequests(...) {totalCount pageInfo {} edges {} nodes {}}
+        # recentProjects(...) {totalCount pageInfo {} edges {} nodes {}}
+        # repositories(...) {totalCount pageInfo {} edges {} nodes {}}
+        # repositoriesContributedTo(...) {totalCount pageInfo {} edges {} nodes {}}
+        # repository(name: ..., followRenames: true) {}
+        # repositoryDiscussionComments(...) {totalCount pageInfo {} edges {} nodes {}}
+        # repositoryDiscussions(...) {totalCount pageInfo {} edges {} nodes {}}
+        resourcePath
+        # savedReplies(...) {totalCount pageInfo {} edges {} nodes {}}
+        # socialAccounts(...) {totalCount pageInfo {} edges {} nodes {}}
+        # sponsoring(...) {totalCount pageInfo {} edges {} nodes {}}
+        # sponsors(...) {totalCount pageInfo {} edges {} nodes {}}
+        # sponsorsActivities(...) {totalCount pageInfo {} edges {} nodes {}}
+        # sponsorsListing {}
+        # sponsorshipForViewerAsSponsor(activeOnly: true) {}
+        # sponsorshipForViewerAsSponsorable(activeOnly: true) {}
+        # sponsorshipNewsletters(...) {totalCount pageInfo {} edges {} nodes {}}
+        # sponsorshipsAsMaintainer(...) {totalCount pageInfo {} edges {} nodes {}}
+        # sponsorshipsAsSponsor(...) {totalCount pageInfo {} edges {} nodes {}}
+        # starredRepositories(...) {totalCount pageInfo {} edges {} nodes {}}
+        status {
+            createdAt
+            emoji
+            emojiHTML
+            expiresAt
+            id
+            indicatesLimitedAvailability
+            message
+            # organization {}
+            updatedAt
+            # user {}
+        }
+        # suggestedListNames {}
+        # topRepositories(...) {totalCount pageInfo {} edges {} nodes {}}
+        totalSponsorshipAmountAsSponsorInCents
+        twitterUsername
+        updatedAt
+        url
+        userViewType
+        # viewerCanChangePinnedItems
+        # viewerCanCreateProjects  # DEPRECATED
+        # viewerCanFollow
+        # viewerCanSponsor
+        # viewerCopilotAgentCreatesChannel
+        # viewerCopilotAgentLogUpdatesChannel
+        # viewerCopilotAgentUpdatesChannel
+        # viewerIsFollowing
+        # viewerIsSponsoring
+        # watching(...) {totalCount pageInfo {} edges {} nodes {}}
+        websiteUrl
+    }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
+}

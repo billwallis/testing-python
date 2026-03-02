@@ -1,6 +1,6 @@
 import arguably
 
-from src.github_reports import reports
+from github_reports import reports
 
 
 @arguably.command
@@ -19,6 +19,17 @@ def org(organisation_name: str) -> None:
     """
 
     return reports.org(organisation_name)
+
+
+@arguably.command
+def user(username: str) -> None:
+    """
+    Generate a report for the given GitHub user.
+
+    :param username: The username of the GitHub user to report on.
+    """
+
+    return reports.user(username)
 
 
 @arguably.command

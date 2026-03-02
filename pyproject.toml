@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [project.scripts]
-gh-report = "src.github_reports.__main__:arguably.run"
+gh-report = "github_reports.__main__:arguably.run"
 
 [dependency-groups]
 dev = [

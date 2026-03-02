@@ -3,6 +3,7 @@ from __future__ import annotations
 import dataclasses
 import datetime
 import functools
+import http
 import json
 import os
 import pathlib
@@ -110,7 +111,7 @@ class GitHubClient:
         self,
         query: str,
         variables: dict[str, Any],
-    ) -> Any:
+    ) -> requests.Response:
         """
         Execute a GraphQL query against GitHub.
 
@@ -127,7 +128,7 @@ class GitHubClient:
             timeout=DEFAULT_TIMEOUT_SECONDS,
         )
 
-        return response.json()
+        return response
 
     def graphql(
         self,
@@ -157,10 +158,12 @@ class GitHubClient:
                 query=query,
                 variables=query_vars,
             )
-            if errors := response.get("errors"):
+            if response.status_code != http.HTTPStatus.OK:
+                raise ValueError(response.text)
+            if errors := response.json().get("errors"):
                 raise ValueError(json.dumps(errors, indent=2))
-            data = response["data"]
 
+            data = response.json()["data"]
             pages.append(data)
 
             page_info = _extract_page_info(data)
@@ -260,3 +263,12 @@ if __name__ == "__main__":
     )
     # print(json.dumps(resp, indent=2))
     (here / "organisation-teams.json").write_text(json.dumps(resp, indent=2))
+
+    resp = gh.graphql(
+        query=(queries / "user.graphql").read_text(),
+        variables={
+            "user": "billwallis",
+        },
+    )
+    # print(json.dumps(resp, indent=2))
+    (here / "user.json").write_text(json.dumps(resp, indent=2))
