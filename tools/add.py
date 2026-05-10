@@ -24,7 +24,6 @@ def _add_file(filename: pathlib.Path, content: str | None = None) -> None:
 
 
 def add_project(project_name: str) -> int:
-    print(project_name)
     project_path = PROJECTS_PATH / _normalise_name(project_name)
     project_path.mkdir(parents=True, exist_ok=True)
 

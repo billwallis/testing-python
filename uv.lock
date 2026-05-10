@@ -16,6 +16,7 @@ members = [
     "testing-python",
     "testing-redis",
     "testing-sqlglot",
+    "testing-struct",
     "yaml-parsing",
 ]
 
@@ -668,6 +669,11 @@ requires-dist = [
     { name = "duckdb", specifier = ">=1.4.4" },
     { name = "sqlglot", extras = ["rs"], specifier = ">=28.10.1" },
 ]
+
+[[package]]
+name = "testing-struct"
+version = "0.0.0"
+source = { virtual = "src/testing_struct" }
 
 [[package]]
 name = "tzdata"
