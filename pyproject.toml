@@ -46,7 +46,7 @@ install.shell = """
     uv run pre-commit install --install-hooks
 """
 upgrade.shell = """
-    uv sync --refresh --upgrade
+    uv sync --all-packages --refresh --upgrade
     uv run pre-commit autoupdate
 """
 
