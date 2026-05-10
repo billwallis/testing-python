@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
+
+[project]
+name = "testing-sqlglot"
+version = "0.0.0"
+dependencies = [
+    "duckdb>=1.4.4",
+    "sqlglot[rs]>=28.10.1",
+]
