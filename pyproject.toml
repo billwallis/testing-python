@@ -46,9 +46,15 @@ install.shell = """
     uv run pre-commit install --install-hooks
 """
 upgrade.shell = """
-    uv sync --refresh --upgrade
+    uv sync --all-packages --refresh --upgrade
     uv run pre-commit autoupdate
 """
+add.shell = """
+    python -m tools.add ${name}
+"""
+add.args = [
+    {name = "name", positional = true, required = true},
+]
 
 [tool.poe.tasks.lint]
 control.expr = "sys.platform"
