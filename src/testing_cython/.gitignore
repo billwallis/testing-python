@@ -1,0 +1,5 @@
+build/
+*.c
+*.html
+*.pyd
+*.zip
