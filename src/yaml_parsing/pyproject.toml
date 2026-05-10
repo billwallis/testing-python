@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
+
+[project]
+name = "yaml-parsing"
+version = "0.0.0"
+dependencies = [
+    "pyyaml>=6.0.3",
+    "ruamel-yaml>=0.19.1",
+]

@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
+
+[project]
+name = "testing-orc"
+version = "0.0.0"
+dependencies = [
+    "pyarrow>=23.0.1",
+    "tzdata>=2025.3; sys_platform == 'win32'", # https://github.com/apache/arrow/issues/46080
+]
