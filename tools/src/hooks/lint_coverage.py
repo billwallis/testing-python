@@ -11,13 +11,14 @@ import tomlkit
 
 SUCCESS = 0
 FAILURE = 1
+TARGET_DIR_GLOB = "projects/*/src"
 
 
 def _get_source_paths(root_dir: pathlib.Path) -> list[str]:
     return sorted(
         [
-            str(pathlib.Path(p).relative_to(root_dir))
-            for p in glob.glob(str(root_dir / "projects/*/src"))
+            pathlib.Path(p).relative_to(root_dir).as_posix()
+            for p in glob.glob(str(root_dir / TARGET_DIR_GLOB))
         ]
     )
 
@@ -30,7 +31,7 @@ def lint_coverage(root_dir: pathlib.Path, coverage_file: pathlib.Path) -> int:
     source_array.clear()
     source_array.add_line(*_get_source_paths(root_dir))
 
-    with open(coverage_file, "w") as f:
+    with open(coverage_file, "w", newline="\n", encoding="utf-8") as f:
         tomlkit.dump(content, f)
 
     return SUCCESS
