@@ -10,9 +10,25 @@ version = "0.0.0"
 description = "Testing stuff with Python."
 authors = [{name = "billwallis"}]
 readme = "README.md"
-license = {file = "LICENSE"}
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "document_formats",
+    "duckdb_parsing",
+    "github_reports",
+    "rich_cli",
+    "testing_async",
+    "testing_avro",
+    "testing_cython",
+    "testing_dbml",
+    "testing_jinja",
+    "testing_nocodb",
+    "testing_orc",
+    "testing_redis",
+    "testing_sqlglot",
+    "testing_struct",
+    "yaml_parsing",
+]
 
 [project.scripts]
 gh-report = "github_reports.__main__:arguably.run"
@@ -21,6 +37,11 @@ gh-report = "github_reports.__main__:arguably.run"
 dev = [
     "poethepoet>=0.42.1",
     "pre-commit>=4.5.1",
+    "tools",
+]
+test = [
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
 ]
 
 
@@ -29,8 +50,26 @@ required-version = ">=0.8"
 default-groups = "all"
 
 [tool.uv.workspace]
-members = ["src/*"]
-exclude = ["src/__pycache__"]
+members = ["projects/*"]
+exclude = ["projects/__pycache__"]
+
+[tool.uv.sources]
+tools = {path = "tools"}
+document_formats = {workspace = true}
+duckdb_parsing = {workspace = true}
+github_reports = {workspace = true}
+rich_cli = {workspace = true}
+testing_async = {workspace = true}
+testing_avro = {workspace = true}
+testing_cython = {workspace = true}
+testing_dbml = {workspace = true}
+testing_jinja = {workspace = true}
+testing_nocodb = {workspace = true}
+testing_orc = {workspace = true}
+testing_redis = {workspace = true}
+testing_sqlglot = {workspace = true}
+testing_struct = {workspace = true}
+yaml_parsing = {workspace = true}
 
 [tool.uv.build-backend]
 namespace = true
@@ -42,15 +81,16 @@ envfile.optional = ".env"
 
 [tool.poe.tasks]
 install.shell = """
-    uv sync --all-packages --refresh
+    uv sync --refresh
     uv run pre-commit install --install-hooks
 """
 upgrade.shell = """
-    uv sync --all-packages --refresh --upgrade
+    uv sync --refresh --upgrade
     uv run pre-commit autoupdate
 """
+test = "uv run pytest -vvv"
 add.shell = """
-    python -m tools.add ${name}
+    uv run -m tools.src.tools.add ${name}
 """
 add.args = [
     {name = "name", positional = true, required = true},
@@ -75,6 +115,11 @@ shell = """
     echo '\\033[0;34mpre-push checks\\033[0m'
     SKIP=identity uv run pre-commit run --all-files --hook-stage pre-push
 """
+
+
+[tool.pytest.ini_options]
+addopts = "--cov"
+testpaths = ["projects/*/tests"]
 
 
 [tool.ruff]
@@ -115,7 +160,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # https://github.com/astral-sh/ruff/issues/4368
 [tool.ruff.lint.extend-per-file-ignores]
-"tests/**/*.py" = [
+"projects/*/tests/**/*.py" = [
     "ANN001",   # Missing type annotation for function argument
     "ANN201",   # Missing return type annotation for public function
     "S101",     # Use of `assert` detected

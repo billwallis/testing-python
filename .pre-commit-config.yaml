@@ -2,7 +2,7 @@
 ---
 ci:
   autoupdate_schedule: quarterly
-  skip: ["identity", "uv-lock"]
+  skip: ["identity", "uv-lock", "check-coverage-schema", "pytest", "coverage-badge"]
 
 default_install_hook_types: ["pre-commit", "pre-push"]
 default_stages: ["pre-commit"]
@@ -19,11 +19,12 @@ repos:
         args: ["--branch", "main"]
       - id: trailing-whitespace
       - id: end-of-file-fixer
+        exclude: "coverage.svg"
       - id: mixed-line-ending
       - id: check-added-large-files
       - id: check-json
       - id: check-yaml
-        exclude: ^src/(document_formats|yaml_parsing)/.*$
+        exclude: ^projects/(document_formats|yaml_parsing)/.*$
       - id: check-toml
       - id: check-ast
       - id: detect-private-key
@@ -60,6 +61,16 @@ repos:
 
   - repo: local
     hooks:
+      - id: check-coverage-schema
+        name: Validate .converagerc.toml schema
+        entry: lint-coverage
+        files: .coveragerc.toml
+        args: ["--root-dir", "."]
+        pass_filenames: true
+        language: python
+
+  - repo: local
+    hooks:
       - id: check-pyproject-schema
         name: Validate pyproject.toml schema
         entry: check-jsonschema
@@ -70,3 +81,25 @@ repos:
         additional_dependencies: ["check-jsonschema==0.37.1"]
         # This calls a remote URL, so run on pre-push to avoid slowing down commits
         stages: ["pre-push"]
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: Run unit tests
+        entry: uv run pytest --quiet --cov-report=xml
+        stages: ["pre-push"]
+        language: unsupported
+        pass_filenames: false
+        always_run: true
+      - id: coverage-badge
+        name: Generate coverage badge
+        entry: >
+          genbadge coverage
+          --input-file 'coverage.xml'
+          --output-file coverage.svg
+          --silent
+        additional_dependencies: ["genbadge[coverage]==1.1.3"]
+        stages: ["pre-push"]
+        language: python
+        pass_filenames: false
+        always_run: true
