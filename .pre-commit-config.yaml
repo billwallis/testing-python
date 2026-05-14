@@ -35,7 +35,7 @@ repos:
       - id: check-pre-commit-ci-config
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.8
+    rev: 0.11.14
     hooks:
       - id: uv-lock
 
@@ -47,14 +47,14 @@ repos:
       - id: ruff-format
 
   - repo: https://github.com/billwallis/bills-hooks
-    rev: v0.0.14
+    rev: v0.0.15
     hooks:
       - id: banned-python-code
       - id: check-no-commit-comment
       - id: tidy-gitkeep
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.1
+    rev: 0.37.2
     hooks:
       - id: check-github-workflows
       - id: check-compose-spec
@@ -62,7 +62,7 @@ repos:
   - repo: local
     hooks:
       - id: check-coverage-schema
-        name: Validate .converagerc.toml schema
+        name: Validate .coveragerc.toml schema
         entry: lint-coverage
         files: .coveragerc.toml
         args: ["--root-dir", "."]
@@ -78,7 +78,7 @@ repos:
         files: pyproject.toml
         pass_filenames: true
         language: python
-        additional_dependencies: ["check-jsonschema==0.37.1"]
+        additional_dependencies: ["check-jsonschema==0.37.2"]
         # This calls a remote URL, so run on pre-push to avoid slowing down commits
         stages: ["pre-push"]
 

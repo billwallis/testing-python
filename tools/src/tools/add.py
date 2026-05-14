@@ -17,6 +17,10 @@ def _validate_name(name: str) -> None:
     raise ValueError(f"{name!r} is not a valid name")
 
 
+def _snake_to_kebab(snake_name: str) -> str:
+    return snake_name.replace("_", "-")
+
+
 def _add_file(filename: pathlib.Path, content: str | None = None) -> None:
     filename.touch(exist_ok=True)
     if content:
@@ -48,7 +52,7 @@ def add_project(project_name: str) -> int:
             # yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
 
             [project]
-            name = "{project_name}"
+            name = "{_snake_to_kebab(project_name)}"
             version = "0.0.0"
             """
         ),
