@@ -61,16 +61,6 @@ repos:
 
   - repo: local
     hooks:
-      - id: check-coverage-schema
-        name: Validate .coveragerc.toml schema
-        entry: lint-coverage
-        files: .coveragerc.toml
-        args: ["--root-dir", "."]
-        pass_filenames: true
-        language: python
-
-  - repo: local
-    hooks:
       - id: check-pyproject-schema
         name: Validate pyproject.toml schema
         entry: check-jsonschema
@@ -81,6 +71,16 @@ repos:
         additional_dependencies: ["check-jsonschema==0.37.2"]
         # This calls a remote URL, so run on pre-push to avoid slowing down commits
         stages: ["pre-push"]
+
+  - repo: local
+    hooks:
+      - id: check-coverage-schema
+        name: Validate .coveragerc.toml schema
+        entry: lint-coverage
+        files: .coveragerc.toml
+        args: ["--root-dir", "."]
+        pass_filenames: true
+        language: python
 
   - repo: local
     hooks:
