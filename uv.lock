@@ -12,6 +12,7 @@ members = [
     "testing-avro",
     "testing-cython",
     "testing-dbml",
+    "testing-duckdb-quack",
     "testing-jinja",
     "testing-nocodb",
     "testing-orc",
@@ -820,6 +821,17 @@ version = "0.0.0"
 source = { editable = "projects/testing_dbml" }
 
 [[package]]
+name = "testing-duckdb-quack"
+version = "0.0.0"
+source = { editable = "projects/testing_duckdb_quack" }
+dependencies = [
+    { name = "duckdb" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "duckdb", specifier = ">=1.5.2" }]
+
+[[package]]
 name = "testing-jinja"
 version = "0.0.0"
 source = { editable = "projects/testing_jinja" }
@@ -863,6 +875,7 @@ dependencies = [
     { name = "testing-avro" },
     { name = "testing-cython" },
     { name = "testing-dbml" },
+    { name = "testing-duckdb-quack" },
     { name = "testing-jinja" },
     { name = "testing-nocodb" },
     { name = "testing-orc" },
@@ -893,6 +906,7 @@ requires-dist = [
     { name = "testing-avro", editable = "projects/testing_avro" },
     { name = "testing-cython", editable = "projects/testing_cython" },
     { name = "testing-dbml", editable = "projects/testing_dbml" },
+    { name = "testing-duckdb-quack", editable = "projects/testing_duckdb_quack" },
     { name = "testing-jinja", editable = "projects/testing_jinja" },
     { name = "testing-nocodb", editable = "projects/testing_nocodb" },
     { name = "testing-orc", editable = "projects/testing_orc" },
