@@ -14,6 +14,7 @@ members = [
     "testing-dbml",
     "testing-duckdb-quack",
     "testing-jinja",
+    "testing-loading-bar",
     "testing-nocodb",
     "testing-orc",
     "testing-python",
@@ -843,6 +844,11 @@ dependencies = [
 requires-dist = [{ name = "jinja2", specifier = ">=3.1.6" }]
 
 [[package]]
+name = "testing-loading-bar"
+version = "0.0.0"
+source = { editable = "projects/testing_loading_bar" }
+
+[[package]]
 name = "testing-nocodb"
 version = "0.0.0"
 source = { editable = "projects/testing_nocodb" }
@@ -877,6 +883,7 @@ dependencies = [
     { name = "testing-dbml" },
     { name = "testing-duckdb-quack" },
     { name = "testing-jinja" },
+    { name = "testing-loading-bar" },
     { name = "testing-nocodb" },
     { name = "testing-orc" },
     { name = "testing-redis" },
@@ -908,6 +915,7 @@ requires-dist = [
     { name = "testing-dbml", editable = "projects/testing_dbml" },
     { name = "testing-duckdb-quack", editable = "projects/testing_duckdb_quack" },
     { name = "testing-jinja", editable = "projects/testing_jinja" },
+    { name = "testing-loading-bar", editable = "projects/testing_loading_bar" },
     { name = "testing-nocodb", editable = "projects/testing_nocodb" },
     { name = "testing-orc", editable = "projects/testing_orc" },
     { name = "testing-redis", editable = "projects/testing_redis" },

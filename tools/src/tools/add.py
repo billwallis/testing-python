@@ -1,6 +1,7 @@
 import argparse
 import pathlib
 import re
+import subprocess
 import textwrap
 from collections.abc import Sequence
 
@@ -25,6 +26,14 @@ def _add_file(filename: pathlib.Path, content: str | None = None) -> None:
     filename.touch(exist_ok=True)
     if content:
         filename.write_text(content, encoding="utf-8")
+
+
+def _run(cmd: Sequence[str]) -> None:
+    subprocess.run(
+        args=cmd,
+        check=True,  # Raise an exception on non-zero return codes
+        capture_output=True,
+    )
 
 
 def add_project(project_name: str) -> int:
@@ -57,6 +66,7 @@ def add_project(project_name: str) -> int:
             """
         ),
     )
+    _run(f"uv add --workspace {project_name}".split(" "))
 
     return SUCCESS
 

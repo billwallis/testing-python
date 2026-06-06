@@ -13,22 +13,23 @@ readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
-    "document_formats",
-    "duckdb_parsing",
-    "github_reports",
-    "rich_cli",
-    "testing_async",
-    "testing_avro",
-    "testing_cython",
-    "testing_dbml",
-    "testing_duckdb_quack",
-    "testing_jinja",
-    "testing_nocodb",
-    "testing_orc",
-    "testing_redis",
-    "testing_sqlglot",
-    "testing_struct",
-    "yaml_parsing",
+    "document-formats",
+    "duckdb-parsing",
+    "github-reports",
+    "rich-cli",
+    "testing-async",
+    "testing-avro",
+    "testing-cython",
+    "testing-dbml",
+    "testing-duckdb-quack",
+    "testing-jinja",
+    "testing-loading-bar",
+    "testing-nocodb",
+    "testing-orc",
+    "testing-redis",
+    "testing-sqlglot",
+    "testing-struct",
+    "yaml-parsing",
 ]
 
 [project.scripts]
@@ -55,23 +56,24 @@ members = ["projects/*"]
 exclude = ["projects/__pycache__"]
 
 [tool.uv.sources]
-tools = {path = "tools"}
-document_formats = {workspace = true}
-duckdb_parsing = {workspace = true}
-github_reports = {workspace = true}
-rich_cli = {workspace = true}
-testing_async = {workspace = true}
-testing_avro = {workspace = true}
-testing_cython = {workspace = true}
-testing_dbml = {workspace = true}
-testing_duckdb_quack = {workspace = true}
-testing_jinja = {workspace = true}
-testing_nocodb = {workspace = true}
-testing_orc = {workspace = true}
-testing_redis = {workspace = true}
-testing_sqlglot = {workspace = true}
-testing_struct = {workspace = true}
-yaml_parsing = {workspace = true}
+tools = { path = "tools" }
+document-formats = { workspace = true }
+duckdb-parsing = { workspace = true }
+github-reports = { workspace = true }
+rich-cli = { workspace = true }
+testing-async = { workspace = true }
+testing-avro = { workspace = true }
+testing-cython = { workspace = true }
+testing-dbml = { workspace = true }
+testing-duckdb-quack = { workspace = true }
+testing-jinja = { workspace = true }
+testing-loading-bar = { workspace = true }
+testing-nocodb = { workspace = true }
+testing-orc = { workspace = true }
+testing-redis = { workspace = true }
+testing-sqlglot = { workspace = true }
+testing-struct = { workspace = true }
+yaml-parsing = { workspace = true }
 
 [tool.uv.build-backend]
 namespace = true
