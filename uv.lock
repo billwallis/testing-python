@@ -130,6 +130,18 @@ wheels = [
 ]
 
 [[package]]
+name = "covdefaults"
+version = "2.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "coverage" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/44/ee/9a6f2611f72e4c5657ae5542a510cf4164d2c673687c0ea73bb1cbd85b4d/covdefaults-2.3.0.tar.gz", hash = "sha256:4e99f679f12d792bc62e5510fa3eb59546ed47bd569e36e4fddc4081c9c3ebf7", size = 4835, upload-time = "2023-03-05T16:43:34.779Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/76/4c/823bc951445aa97e5a1b7e337690db3abf85212c8d138e170922e7916ac8/covdefaults-2.3.0-py2.py3-none-any.whl", hash = "sha256:2832961f6ffcfe4b57c338bc3418a3526f495c26fb9c54565409c5532f7c41be", size = 5144, upload-time = "2023-03-05T16:43:33.245Z" },
+]
+
+[[package]]
 name = "coverage"
 version = "7.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -514,15 +526,15 @@ wheels = [
 
 [[package]]
 name = "poethepoet"
-version = "0.45.0"
+version = "0.46.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pastel" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1d/28/d54e16913f591f01b2e1c4ab526ccbba47864d9bf10299904c823a760d25/poethepoet-0.45.0.tar.gz", hash = "sha256:cf2c2df4c185d33b619c2771de2b28c2b81c733f072226030c7fa4c273c040f8", size = 97150, upload-time = "2026-04-28T21:04:59.301Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3b/f5/d501fcb67e450fd3fae9db06050420c0c6043758cfa8c30ba40278211265/poethepoet-0.46.0.tar.gz", hash = "sha256:daf8469031879ef59ef0b34fdba83574d65e41eb9186e20cd0f7c89ce479b030", size = 117276, upload-time = "2026-05-15T15:52:02.548Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e9/99/4aefb693b0f52783fab496492f4444a75137312c386eb7c3320f1b0a1602/poethepoet-0.45.0-py3-none-any.whl", hash = "sha256:8e25f6e834ecf25fe2ddca676a4e0207eeb2e19def0a8709fc5c7f18e86cd68c", size = 123920, upload-time = "2026-04-28T21:04:57.66Z" },
+    { url = "https://files.pythonhosted.org/packages/af/01/a9d6ea30351919298d3dc237172ae6a60ce0224ecaaee289b671ab979c13/poethepoet-0.46.0-py3-none-any.whl", hash = "sha256:dc6d770a14792d124abac9066c5a707876027d1878ac9ca26cf57e9b2a96dc89", size = 150581, upload-time = "2026-05-15T15:52:01.118Z" },
 ]
 
 [[package]]
@@ -600,20 +612,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/7d/0d/549bd94f1a0a402dc8cf64563a117c0f3765662e2e668477624baeec44d5/pytest-9.0.3.tar.gz", hash = "sha256:b86ada508af81d19edeb213c681b1d48246c1a91d304c6c81a427674c17eb91c", size = 1572165, upload-time = "2026-04-07T17:16:18.027Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d4/24/a372aaf5c9b7208e7112038812994107bc65a84cd00e0354a88c2c77a617/pytest-9.0.3-py3-none-any.whl", hash = "sha256:2c5efc453d45394fdd706ade797c0a81091eccd1d6e4bccfcd476e2b8e0ab5d9", size = 375249, upload-time = "2026-04-07T17:16:16.13Z" },
-]
-
-[[package]]
-name = "pytest-cov"
-version = "7.1.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "coverage" },
-    { name = "pluggy" },
-    { name = "pytest" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/b1/51/a849f96e117386044471c8ec2bd6cfebacda285da9525c9106aeb28da671/pytest_cov-7.1.0.tar.gz", hash = "sha256:30674f2b5f6351aa09702a9c8c364f6a01c27aae0c1366ae8016160d1efc56b2", size = 55592, upload-time = "2026-03-21T20:11:16.284Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/7a/d968e294073affff457b041c2be9868a40c1c71f4a35fcc1e45e5493067b/pytest_cov-7.1.0-py3-none-any.whl", hash = "sha256:a0461110b7865f9a271aa1b51e516c9a95de9d696734a2f71e3e78f46e1d4678", size = 22876, upload-time = "2026-03-21T20:11:14.438Z" },
 ]
 
 [[package]]
@@ -899,8 +897,9 @@ dev = [
     { name = "tools" },
 ]
 test = [
+    { name = "covdefaults" },
+    { name = "coverage" },
     { name = "pytest" },
-    { name = "pytest-cov" },
 ]
 
 [package.metadata]
@@ -926,13 +925,14 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "poethepoet", specifier = ">=0.42.1" },
-    { name = "pre-commit", specifier = ">=4.5.1" },
+    { name = "poethepoet", specifier = ">=0.46.0" },
+    { name = "pre-commit", specifier = ">=4.6.0" },
     { name = "tools", directory = "tools" },
 ]
 test = [
+    { name = "covdefaults", specifier = ">=2.3.0" },
+    { name = "coverage", specifier = ">=7.13.5" },
     { name = "pytest", specifier = ">=9.0.3" },
-    { name = "pytest-cov", specifier = ">=7.0.0" },
 ]
 
 [[package]]

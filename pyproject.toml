@@ -1,7 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
-
 [build-system]
-requires = ["uv_build>=0.8"]
+requires = ["uv_build"]
 build-backend = "uv_build"
 
 [project]
@@ -37,18 +36,18 @@ gh-report = "github_reports.__main__:arguably.run"
 
 [dependency-groups]
 dev = [
-    "poethepoet>=0.42.1",
-    "pre-commit>=4.5.1",
+    "poethepoet>=0.46.0",
+    "pre-commit>=4.6.0",
     "tools",
 ]
 test = [
+    "coverage>=7.13.5",
+    "covdefaults>=2.3.0",
     "pytest>=9.0.3",
-    "pytest-cov>=7.0.0",
 ]
 
 
 [tool.uv]
-required-version = ">=0.8"
 default-groups = "all"
 
 [tool.uv.workspace]
@@ -92,7 +91,11 @@ upgrade.shell = """
     uv sync --refresh --upgrade
     uv run pre-commit autoupdate
 """
-test = "uv run pytest -vvv"
+test.shell = """
+    uv run coverage run -m pytest -vvv
+    uv run coverage report --no-skip-covered
+    uv run coverage xml --quiet
+"""
 add.shell = """
     uv run -m tools.src.tools.add ${name}
 """
@@ -122,13 +125,15 @@ shell = """
 
 
 [tool.pytest.ini_options]
-addopts = "--cov"
 testpaths = ["projects/*/tests"]
 
 [tool.coverage]
-run.branch = true
+run.plugins = ["covdefaults"]  # https://youtu.be/70T6OxKwxm0
 report.fail_under = 0
-report.show_missing = true
+report.exclude_lines = [
+    "@pytest.mark.skip",
+    "@pytest.mark.xfail",
+]
 
 
 [tool.ruff]
