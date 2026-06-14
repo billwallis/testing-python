@@ -887,6 +887,7 @@ dependencies = [
     { name = "testing-redis" },
     { name = "testing-sqlglot" },
     { name = "testing-struct" },
+    { name = "tools" },
     { name = "yaml-parsing" },
 ]
 
@@ -894,7 +895,6 @@ dependencies = [
 dev = [
     { name = "poethepoet" },
     { name = "pre-commit" },
-    { name = "tools" },
 ]
 test = [
     { name = "covdefaults" },
@@ -920,6 +920,7 @@ requires-dist = [
     { name = "testing-redis", editable = "projects/testing_redis" },
     { name = "testing-sqlglot", editable = "projects/testing_sqlglot" },
     { name = "testing-struct", editable = "projects/testing_struct" },
+    { name = "tools", directory = "tools" },
     { name = "yaml-parsing", editable = "projects/yaml_parsing" },
 ]
 
@@ -927,7 +928,6 @@ requires-dist = [
 dev = [
     { name = "poethepoet", specifier = ">=0.46.0" },
     { name = "pre-commit", specifier = ">=4.6.0" },
-    { name = "tools", directory = "tools" },
 ]
 test = [
     { name = "covdefaults", specifier = ">=2.3.0" },
