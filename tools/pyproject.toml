@@ -7,18 +7,12 @@ dependencies = [
     "tomlkit>=0.15.0",
 ]
 
-[project.scripts]
-lint-coverage = "hooks.lint_coverage:main"
-
 [build-system]
-requires = ["uv_build>=0.8"]
+requires = ["uv_build"]
 build-backend = "uv_build"
 
 
 [tool.uv.build-backend]
 namespace = true
 module-root = "src"
-module-name = [
-    "hooks",
-    "tools",
-]
+module-name = ["tools"]
