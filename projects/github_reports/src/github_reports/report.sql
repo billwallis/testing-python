@@ -23,15 +23,15 @@ create or replace table pull_requests as
 create or replace table branch_pr_status as
     select
         commit_sha,
-        branches.branch_name,
+        branch_name,
         pull_requests.number as pr_number,
         pull_requests.updated_at as pr_updated_at,
         pull_requests.state as pr_state,
     from branches
         asof left join pull_requests
-            using (commit_sha, updated_at)
+            using (commit_sha, branch_name, updated_at)
     order by
-        if(branches.branch_name = 'main', 0, 1),
+        if(branch_name = 'main', 0, 1),
         pr_updated_at desc
 ;
 /* Report */
