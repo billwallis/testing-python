@@ -174,6 +174,15 @@ class GitHubClient:
 
         return pages
 
+    def post(self, **kwargs: Any) -> requests.Response:
+        endpoint = kwargs.pop("endpoint")
+        headers = kwargs.pop("headers") or self.headers
+        return requests.post(  # noqa: S113
+            url=f"{REST_API_BASE_URL}/{endpoint}",
+            headers=headers,  # type: ignore
+            **kwargs,  # type: ignore
+        )
+
 
 def _extract_page_info(data: dict) -> PageInfo:
     """
