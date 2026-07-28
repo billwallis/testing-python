@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import functools
 import logging
 import pathlib
+import re
 import shlex
 import subprocess
 import textwrap
@@ -70,8 +72,15 @@ def _error(text: str, prefix: str = "") -> None:
     _log(logger.error, text, prefix, RED)
 
 
-def _run_git_cmd(args: Iterable[str]) -> Generator[str]:
-    cmd = ("git", *args)
+def _run_git_cmd(
+    args: Iterable[str],
+    git_dir: pathlib.Path | None = None,
+) -> Generator[str]:
+    cmd = (
+        ("git", *args)
+        if git_dir is None
+        else ("git", "-C", str(git_dir), *args)
+    )
     _debug(colour(shlex.join(cmd), BOLD))
 
     if DRY_RUN:
@@ -81,22 +90,25 @@ def _run_git_cmd(args: Iterable[str]) -> Generator[str]:
     popen = subprocess.Popen(
         args=cmd,
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
         universal_newlines=True,
     )
+    stderr = ""
     if popen.stdout:
         for line in popen.stdout:
             yield line.rstrip("\n")
     if popen.stderr:
         for line in popen.stderr:
+            stderr += line
             yield line.rstrip("\n")
 
     popen.wait()
     if popen.returncode != 0:
-        raise RuntimeError("git returned a non-zero exit code")
+        raise RuntimeError(stderr)
 
 
-def _git(args: Iterable[str]) -> str:
-    return "\n".join(_run_git_cmd(args=args))
+def _git(args: Iterable[str], git_dir: pathlib.Path | None = None) -> str:
+    return "\n".join(_run_git_cmd(args=args, git_dir=git_dir))
 
 
 def _run_report(
@@ -115,9 +127,37 @@ def _run_report(
     return connection.sql(report_sql)
 
 
-def branches(args: argparse.Namespace) -> int:
+def _delete_branch(branch_name: str, git_dir: pathlib.Path) -> int:
+    try:
+        _debug(
+            _git(
+                args=("push", GIT_REMOTE_NAME, "--delete", branch_name),
+                git_dir=git_dir,
+            ),
+            prefix="    ",
+        )
+        return 0
+    except RuntimeError as err:
+        pattern = re.compile(
+            r"error: unable to delete '(.+)': remote ref does not exist"
+        )
+        if match := pattern.match(str(err)):
+            _warning(
+                f"warning: skipping delete of '{match.group(1)}': remote ref does not exist"
+            )
+            return 0
+        _error(str(err))
+        return 1
+
+
+def branches(args: argparse.Namespace) -> int:  # noqa: PLR0912
+    git_dir = pathlib.Path(args.git_dir)
+    if not git_dir.exists():
+        _error(f"error: path '{git_dir}' does not exist")
+        return 1
+
     if args.delete:
-        _git(("fetch",))
+        _git(("fetch",), git_dir=git_dir)
         full_repo_name = f"{args.organisation}/{args.repository}"
         _info(f"deleting merged branches in {colour(full_repo_name, BOLD)}...")
         conn = duckdb.connect()
@@ -153,8 +193,15 @@ def branches(args: argparse.Namespace) -> int:
                     f"  (PR {pr_number} was merged at {pr_updated_at})", GREY
                 )
             )
+            delete_branch = functools.partial(
+                _delete_branch,
+                branch_name=branch_name,
+                git_dir=git_dir,
+            )
+
             if args.force:
-                _debug(_git(("push", GIT_REMOTE_NAME, "--delete", branch_name)))
+                if delete_branch() != 0:
+                    return 1
                 continue
 
             while True:
@@ -170,13 +217,14 @@ def branches(args: argparse.Namespace) -> int:
                 else:
                     break
             if confirm == "y":
-                _debug(_git(("push", GIT_REMOTE_NAME, "--delete", branch_name)))
+                if delete_branch() != 0:
+                    return 1
             elif confirm == "n":
                 _debug(f"skipping {branch_name}")
                 continue
             else:
                 raise RuntimeError("error: branch should be unreachable")
-        _debug(_git(("fetch", "--prune")))
+        _debug(_git(("fetch", "--prune"), git_dir=git_dir))
         return 0
     return 1
 
@@ -194,6 +242,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     parser.add_argument(
         "--repository",
+        required=True,
+    )
+    parser.add_argument(
+        "--git-dir",
         required=True,
     )
     parser.add_argument(
