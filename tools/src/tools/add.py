@@ -66,7 +66,6 @@ def add_project(project_name: str) -> int:
             """
         ),
     )
-    _run(f"uv add --workspace {project_name}".split(" "))
 
     return SUCCESS
 

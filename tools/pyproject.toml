@@ -8,11 +8,10 @@ dependencies = [
 ]
 
 [build-system]
-requires = ["uv_build"]
-build-backend = "uv_build"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 
-[tool.uv.build-backend]
-namespace = true
-module-root = "src"
-module-name = ["tools"]
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true

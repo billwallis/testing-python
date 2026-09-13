@@ -1,6 +1,6 @@
 import json
 
-from github_reports import utils
+from projects.github_reports.src.github_reports import utils
 
 
 def test__repr_encoder_can_encode_objects():

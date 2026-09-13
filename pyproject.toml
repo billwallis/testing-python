@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/pyproject.json
 [build-system]
-requires = ["uv_build"]
-build-backend = "uv_build"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "testing-python"
@@ -11,27 +11,6 @@ authors = [{name = "billwallis"}]
 readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.13"
-dependencies = [
-    "tools",
-
-    "document-formats",
-    "duckdb-parsing",
-    "github-reports",
-    "rich-cli",
-    "testing-async",
-    "testing-avro",
-    "testing-cython",
-    "testing-dbml",
-    "testing-duckdb-quack",
-    "testing-jinja",
-    "testing-loading-bar",
-    "testing-nocodb",
-    "testing-orc",
-    "testing-redis",
-    "testing-sqlglot",
-    "testing-struct",
-    "yaml-parsing",
-]
 
 [project.scripts]
 gh-report = "github_reports.__main__:arguably.run"
@@ -51,32 +30,9 @@ test = [
 [tool.uv]
 default-groups = "all"
 
-[tool.uv.workspace]
-members = ["projects/*"]
+[tool.setuptools.packages.find]
+where = ["projects"]
 exclude = ["projects/__pycache__"]
-
-[tool.uv.sources]
-tools = { path = "tools" }
-document-formats = { workspace = true }
-duckdb-parsing = { workspace = true }
-github-reports = { workspace = true }
-rich-cli = { workspace = true }
-testing-async = { workspace = true }
-testing-avro = { workspace = true }
-testing-cython = { workspace = true }
-testing-dbml = { workspace = true }
-testing-duckdb-quack = { workspace = true }
-testing-jinja = { workspace = true }
-testing-loading-bar = { workspace = true }
-testing-nocodb = { workspace = true }
-testing-orc = { workspace = true }
-testing-redis = { workspace = true }
-testing-sqlglot = { workspace = true }
-testing-struct = { workspace = true }
-yaml-parsing = { workspace = true }
-
-[tool.uv.build-backend]
-namespace = true
 
 
 [tool.poe]
@@ -85,20 +41,16 @@ envfile.optional = ".env"
 
 [tool.poe.tasks]
 install.shell = """
-    uv sync --refresh
-    uv run pre-commit install --install-hooks
-"""
-upgrade.shell = """
-    uv sync --refresh --upgrade
-    uv run pre-commit autoupdate
+    pip install --editable . --group dev --group test
+    pre-commit install --install-hooks
 """
 test.shell = """
-    uv run coverage run -m pytest -vvv
-    uv run coverage report --no-skip-covered
-    uv run coverage xml --quiet
+    coverage run -m pytest -vvv
+    coverage report --no-skip-covered
+    coverage xml --quiet
 """
 add.shell = """
-    uv run -m tools.src.tools.add ${name}
+    python -m tools.src.tools.add ${name}
 """
 add.args = [
     {name = "name", positional = true, required = true},
@@ -111,17 +63,17 @@ control.expr = "sys.platform"
 case = "win32"
 shell = """
     echo '=== pre-commit checks ==='
-    SKIP=identity uv run pre-commit run --all-files --hook-stage pre-commit
+    SKIP=identity pre-commit run --all-files --hook-stage pre-commit
     echo '=== pre-push checks ==='
-    SKIP=identity uv run pre-commit run --all-files --hook-stage pre-push
+    SKIP=identity pre-commit run --all-files --hook-stage pre-push
 """
 
 [[tool.poe.tasks.lint.switch]]
 shell = """
     echo '\\033[0;34mpre-commit checks\\033[0m'
-    SKIP=identity uv run pre-commit run --all-files --hook-stage pre-commit
+    SKIP=identity pre-commit run --all-files --hook-stage pre-commit
     echo '\\033[0;34mpre-push checks\\033[0m'
-    SKIP=identity uv run pre-commit run --all-files --hook-stage pre-push
+    SKIP=identity pre-commit run --all-files --hook-stage pre-push
 """
 
 
@@ -134,51 +86,4 @@ report.fail_under = 1
 report.exclude_lines = [
     "@pytest.mark.skip",
     "@pytest.mark.xfail",
-]
-
-
-[tool.ruff]
-line-length = 80
-indent-width = 4
-target-version = "py313"
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-skip-magic-trailing-comma = false
-line-ending = "auto"
-
-[tool.ruff.lint]
-select = [
-    "ANN",   # flake8-annotations
-    "B",     # flake8-bugbear
-    "E",     # pycodestyle-error
-    "F",     # Pyflakes
-    "FURB",  # refurb
-    "I",     # isort
-    "N",     # pep8-naming
-    "PL",    # Pylint
-    "PERF",  # Perflint
-    "RUF",   # Ruff-specific
-    "S",     # flake8-bandit
-    "UP",    # pyupgrade
-    "W",     # pycodestyle-warning
-]
-ignore = [
-    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed
-    "E501",    # Line too long
-]
-fixable = ["ALL"]
-unfixable = []
-# Allow unused variables when underscore-prefixed
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-# https://github.com/astral-sh/ruff/issues/4368
-[tool.ruff.lint.extend-per-file-ignores]
-"**/tests/**/*.py" = [
-    "ANN001",   # Missing type annotation for function argument
-    "ANN201",   # Missing return type annotation for public function
-    "S101",     # Use of `assert` detected
-    "PLR2004",  # Magic value used in comparison
-    "PLR0913",  # Too many arguments in function definition
 ]
