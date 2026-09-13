@@ -47,13 +47,11 @@ def add_project(project_name: str) -> int:
 
     # Add directories
     (project_path / "src" / project_name).mkdir(parents=True, exist_ok=True)
-    (project_path / "tests").mkdir(parents=True, exist_ok=True)
 
     # Add files
     _add_file(project_path / "__init__.py")
     _add_file(project_path / "src" / project_name / "__init__.py")
     _add_file(project_path / "src" / project_name / "main.py")
-    _add_file(project_path / "tests/__init__.py")
     _add_file(
         filename=project_path / "pyproject.toml",
         content=textwrap.dedent(

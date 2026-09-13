@@ -17,6 +17,6 @@ Testing stuff with Python.
 Install the dependencies:
 
 ```shell
-pip install --editable . --group dev --group test
+pip install --editable . --group dev
 pre-commit install --install-hooks
 ```

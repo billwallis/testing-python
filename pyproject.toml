@@ -18,15 +18,7 @@ dev = [
     "poethepoet>=0.46.0",
     "pre-commit>=4.6.0",
 ]
-test = [
-    "coverage>=7.13.5",
-    "covdefaults>=2.3.0",
-    "pytest>=9.0.3",
-]
 
-
-[tool.uv]
-default-groups = "all"
 
 [tool.setuptools.packages.find]
 where = ["projects"]
@@ -39,13 +31,8 @@ envfile.optional = ".env"
 
 [tool.poe.tasks]
 install.shell = """
-    pip install --editable . --group dev --group test
+    pip install --editable . --group dev
     pre-commit install --install-hooks
-"""
-test.shell = """
-    coverage run -m pytest -vvv
-    coverage report --no-skip-covered
-    coverage xml --quiet
 """
 add.shell = """
     python -m tools.src.tools.add ${name}
@@ -73,15 +60,3 @@ shell = """
     echo '\\033[0;34mpre-push checks\\033[0m'
     SKIP=identity pre-commit run --all-files --hook-stage pre-push
 """
-
-
-[tool.pytest.ini_options]
-testpaths = ["projects/*/tests"]
-
-[tool.coverage]
-run.plugins = ["covdefaults"]  # https://youtu.be/70T6OxKwxm0
-report.fail_under = 1
-report.exclude_lines = [
-    "@pytest.mark.skip",
-    "@pytest.mark.xfail",
-]
