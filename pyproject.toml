@@ -11,9 +11,7 @@ authors = [{name = "billwallis"}]
 readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.13"
-
-[project.scripts]
-gh-report = "github_reports.__main__:arguably.run"
+dependencies = []
 
 [dependency-groups]
 dev = [
