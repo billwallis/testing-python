@@ -1,0 +1,16 @@
+-e file:./projects/document_formats
+-e file:./projects/duckdb_parsing
+-e file:./projects/rich_cli
+-e file:./projects/testing_async
+-e file:./projects/testing_avro
+-e file:./projects/testing_cython
+-e file:./projects/testing_dbml
+-e file:./projects/testing_duckdb_quack
+-e file:./projects/testing_jinja
+-e file:./projects/testing_loading_bar
+-e file:./projects/testing_nocodb
+-e file:./projects/testing_orc
+-e file:./projects/testing_redis
+-e file:./projects/testing_sqlglot
+-e file:./projects/testing_struct
+-e file:./projects/yaml_parsing

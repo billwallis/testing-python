@@ -17,6 +17,7 @@ Testing stuff with Python.
 Install the dependencies:
 
 ```shell
+pip install --editable . --requirement requirements.txt
 pip install --editable . --group dev
 pre-commit install --install-hooks
 ```
