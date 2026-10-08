@@ -11,7 +11,7 @@ authors = [{name = "billwallis"}]
 readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.13"
-dependencies = []
+dynamic = ["dependencies"]
 
 [dependency-groups]
 dev = [
@@ -20,9 +20,9 @@ dev = [
 ]
 
 
-[tool.setuptools.packages.find]
-where = ["projects"]
-exclude = ["projects/__pycache__"]
+# For some reason, setuptools doesn't like the editable syntax :sob:
+#[tool.setuptools.dynamic]
+#dependencies = {file = ["requirements.txt"]}
 
 
 [tool.poe]
@@ -31,6 +31,7 @@ envfile.optional = ".env"
 
 [tool.poe.tasks]
 install.shell = """
+    pip install --editable . --requirement requirements.txt
     pip install --editable . --group dev
     pre-commit install --install-hooks
 """
