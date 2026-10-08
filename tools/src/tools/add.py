@@ -8,14 +8,15 @@ from collections.abc import Sequence
 SUCCESS = 0
 FAILURE = 1
 HERE = pathlib.Path(__file__).parent
-PROJECTS_PATH = HERE.parent.parent.parent / "projects"
+PROJECTS_PATH = HERE.parent / "projects"
 
 
 def _validate_name(name: str) -> None:
-    if re.match(r"^[a-zA-Z0-9_]+$", name):
+    pattern = r"^[a-zA-Z0-9_]+$"
+    if re.match(pattern, name):
         return
 
-    raise ValueError(f"{name!r} is not a valid name")
+    raise ValueError(f"{name!r} is not a valid name, does not match {pattern}")
 
 
 def _snake_to_kebab(snake_name: str) -> str:
@@ -29,7 +30,7 @@ def _add_file(filename: pathlib.Path, content: str | None = None) -> None:
 
 
 def _run(cmd: Sequence[str]) -> None:
-    subprocess.run(
+    subprocess.run(  # noqa: S603
         args=cmd,
         check=True,  # Raise an exception on non-zero return codes
         capture_output=True,
@@ -47,11 +48,13 @@ def add_project(project_name: str) -> int:
 
     # Add directories
     (project_path / "src" / project_name).mkdir(parents=True, exist_ok=True)
+    (project_path / "tests").mkdir(parents=True, exist_ok=True)
 
     # Add files
     _add_file(project_path / "__init__.py")
     _add_file(project_path / "src" / project_name / "__init__.py")
     _add_file(project_path / "src" / project_name / "main.py")
+    _add_file(project_path / "tests/__init__.py")
     _add_file(
         filename=project_path / "pyproject.toml",
         content=textwrap.dedent(
@@ -64,6 +67,22 @@ def add_project(project_name: str) -> int:
             """
         ),
     )
+
+    print("TODO: add project to pyproject.toml:tool.coverage.run.source")
+    print(
+        textwrap.indent(
+            textwrap.dedent(
+                f"""\
+                    "projects/{project_name}/src/",
+                    "projects/{project_name}/tests/",
+                """
+            ),
+            prefix="    ",
+        )
+    )
+
+    print("TODO: add project to requirements.txt")
+    print(f"    -e file:./projects/{project_name}")
 
     return SUCCESS
 
