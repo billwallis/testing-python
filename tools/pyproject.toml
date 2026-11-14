@@ -6,6 +6,7 @@ version = "0.0.0"
 dependencies = [
     "tomlkit>=0.15.0",
 ]
+scripts.add = "tools.add:main"
 
 [build-system]
 requires = ["setuptools"]
