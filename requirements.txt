@@ -14,3 +14,4 @@
 -e file:./projects/testing_sqlglot
 -e file:./projects/testing_struct
 -e file:./projects/yaml_parsing
+-e file:./tools

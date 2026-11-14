@@ -8,7 +8,7 @@ from collections.abc import Sequence
 SUCCESS = 0
 FAILURE = 1
 HERE = pathlib.Path(__file__).parent
-PROJECTS_PATH = HERE.parent / "projects"
+PROJECTS_PATH = HERE.parent.parent.parent / "projects"
 
 
 def _validate_name(name: str) -> None:
